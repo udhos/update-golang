@@ -116,6 +116,5 @@ relink
 path
 
 msg golang $label installed at: `solve $goroot`
-msg remember to add `solve $goroot/bin` to your PATH
 
 cleanup
