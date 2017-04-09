@@ -15,8 +15,9 @@ Caution
 
 Before running the script, make you sure you have an untampered copy by verifying the SHA256 checksum.
 
-    $ wget -O hash.txt https://raw.githubusercontent.com/udhos/update-golang/master/update-golang.sh.sha256
+    $ wget -qO hash.txt https://raw.githubusercontent.com/udhos/update-golang/master/update-golang.sh.sha256
     $ sha256sum -c hash.txt
+    update-golang.sh: OK
 
 Example
 =======
