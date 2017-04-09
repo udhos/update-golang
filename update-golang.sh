@@ -98,7 +98,7 @@ relink() {
     ln -s $l $g
 }
 
-msg will install golang $label as: $goroot
+msg will install golang $label as: `solve $goroot`
 
 cd $destination || die could not enter destination=$destination
 
@@ -107,7 +107,7 @@ remove_old_link
 untar
 relink
 
-msg golang $label installed at: $goroot
-msg remember to add $goroot/bin to your PATH
+msg golang $label installed at: `solve $goroot`
+msg remember to add `solve $goroot/bin` to your PATH
 
 cleanup
