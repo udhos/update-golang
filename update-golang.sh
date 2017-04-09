@@ -98,6 +98,13 @@ relink() {
     ln -s $l $g
 }
 
+path() {
+    b=`solve $goroot/bin`
+    p=/etc/profile.d/golang_path.sh
+    msg issuing path $b to $p
+    echo "export PATH=\$PATH:$b" > $p
+}
+
 msg will install golang $label as: `solve $goroot`
 
 cd $destination || die could not enter destination=$destination
@@ -106,6 +113,7 @@ download
 remove_old_link
 untar
 relink
+path
 
 msg golang $label installed at: `solve $goroot`
 msg remember to add `solve $goroot/bin` to your PATH
