@@ -22,7 +22,7 @@ esac
 [ -n "$OS" ] && os=$OS
 [ -n "$ARCH" ] && arch=$ARCH
 
-cat <<EOF
+cat >&2 <<EOF
 SOURCE=$source
 DESTINATION=$destination
 RELEASE=$release
