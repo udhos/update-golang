@@ -3,6 +3,21 @@
 # update-golang
 update-golang is a script to easily fetch and install new Golang releases
 
+How it works
+============
+
+This is the default behavior:
+
+1\. The script uses local system OS and ARCH to download the correct binary release. It is not harmful to run the script multiple times. Downloaded releases are kept as cache under '/usr/local'. You can erase them manually.
+
+2\. The release is installed at '/usr/local/go'.
+
+3\. The path '/usr/local/go/bin' is added to PATH using '/etc/profile.d/golang_path.sh'.
+
+4\. Only if needed, GOROOT is properly setup, also using '/etc/profile.d/golang_path.sh'.
+
+You can customize the behavior by setting environment variables (see Customization below).
+
 Usage
 =====
 
@@ -13,7 +28,7 @@ Usage
 Caution
 =======
 
-Before running the script, make you sure you have an untampered copy by verifying the SHA256 checksum.
+Before running the script, make sure you have an untampered copy by verifying the SHA256 checksum.
 
     $ wget -qO hash.txt https://raw.githubusercontent.com/udhos/update-golang/master/update-golang.sh.sha256
     $ sha256sum -c hash.txt
