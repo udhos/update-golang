@@ -1,3 +1,5 @@
+[![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/udhos/update-golang/blob/master/LICENSE)
+
 # update-golang
 update-golang is a script to easily fetch and install new Golang releases
 
