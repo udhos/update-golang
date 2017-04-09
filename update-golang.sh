@@ -1,4 +1,17 @@
 #!/bin/bash
+#
+# update-golang is a script to easily fetch and install new Golang releases
+#
+# Home: https://github.com/udhos/update-golang
+
+version=0.0
+
+me=`basename $0`
+msg() {
+    echo >&2 $me: $*
+}
+
+msg version $version
 
 # defaults
 source=https://storage.googleapis.com/golang
@@ -37,14 +50,7 @@ url=$source/$filename
 goroot=$destination/go
 filepath=$destination/$filename
 
-me=`basename $0`
-
-msg() {
-    echo >&2 $me: $*
-}
-
 save_dir=$PWD
-
 cleanup() {
     [ -n "$save_dir" ] && cd $save_dir
 }
