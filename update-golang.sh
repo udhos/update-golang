@@ -35,6 +35,7 @@ label=go$release.$os-$arch
 filename=$label.tar.gz
 url=$source/$filename
 goroot=$destination/go
+filepath=$destination/$filename
 
 me=`basename $0`
 
@@ -66,7 +67,12 @@ solve() {
 download() {
     if echo $url | egrep -q '^https?:'; then
 	msg $url is remote
-	wget -O $filename $url || die could not download using wget from: $url
+	f=`solve $filepath`
+	if [ -f "$f" ]; then
+	    msg no need to download - file cached: $f
+	else
+	    wget -O $filename $url || die could not download using wget from: $url
+	fi
     else
 	u=`solve $url`
 	msg $u is local
@@ -85,11 +91,9 @@ untar() {
     l=`solve $destination/$label`
     msg untar: rm -rf $l
     rm -rf $l
-    f=`solve $destination/$filename`
+    f=`solve $filepath`
     msg untar: tar xf $f
     tar xf $f || die could not untar: $f
-    msg untar: rm $f
-    rm $f
 }
 
 relink() {
