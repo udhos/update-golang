@@ -10,6 +10,14 @@ Usage
     cd update-golang
     sudo ./update-golang.sh
 
+Caution
+=======
+
+Before running the script, make you sure you have an untampered copy by verifying the SHA256 checksum.
+
+    $ wget https://raw.githubusercontent.com/udhos/update-golang/master/update-golang.sh.sha256
+    $ sha256sum -c update-golang.sh.sha25
+
 Example
 =======
 
