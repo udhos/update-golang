@@ -66,7 +66,7 @@ solve() {
 download() {
     if echo $url | egrep -q '^https?:'; then
 	msg $url is remote
-	wget $url || die could not download using wget from: $url
+	wget -O $filename $url || die could not download using wget from: $url
     else
 	u=`solve $url`
 	msg $u is local
