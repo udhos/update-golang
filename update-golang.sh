@@ -49,6 +49,7 @@ filename=$label.tar.gz
 url=$source/$filename
 goroot=$destination/go
 filepath=$destination/$filename
+new_install=$destination/$label
 
 save_dir=$PWD
 cleanup() {
@@ -62,7 +63,7 @@ die() {
 }
 
 solve() {
-    path=$1
+    local path=$1
     if echo $path | egrep -q ^/; then
 	echo $path
     else
@@ -73,14 +74,14 @@ solve() {
 download() {
     if echo $url | egrep -q '^https?:'; then
 	msg $url is remote
-	f=`solve $filepath`
+	local f=`solve $filepath`
 	if [ -f "$f" ]; then
 	    msg no need to download - file cached: $f
 	else
 	    wget -O $filename $url || die could not download using wget from: $url
 	fi
     else
-	u=`solve $url`
+	local u=`solve $url`
 	msg $u is local
 	cp $u . || die could not copy from: $u
     fi
@@ -94,24 +95,24 @@ remove_old_link() {
 }
 
 untar() {
-    l=`solve $destination/$label`
+    local l=`solve $new_install`
     msg untar: rm -rf $l
     rm -rf $l
-    f=`solve $filepath`
+    local f=`solve $filepath`
     msg untar: tar xf $f
     tar xf $f || die could not untar: $f
 }
 
 relink() {
-    l=`solve $destination/$label`
-    g=`solve $goroot`
+    local l=`solve $new_install`
+    local g=`solve $goroot`
     mv $g $l
     ln -s $l $g
 }
 
 path() {
-    b=`solve $goroot/bin`
-    p=/etc/profile.d/golang_path.sh
+    local b=`solve $goroot/bin`
+    local p=/etc/profile.d/golang_path.sh
     msg issuing path $b to $p
     echo "export PATH=\$PATH:$b" > $p
     if [ "$b" != /usr/local/go/bin ]; then
@@ -121,22 +122,57 @@ path() {
 }
 
 test() {
-    gotool=`solve $goroot/bin/go`
+    local gotool=`solve $goroot/bin/go`
     msg testing $gotool:
-    $gotool version
+    if $gotool version; then
+	msg SUCCESS
+    else
+	msg FAIL
+    fi
 }
+
+symlink_test() {
+    file $1 | grep -q symbolic
+}
+
+symlink_get() {
+    file $1 | awk '{print $NF}'
+}
+
+#
+# main section: begin
+#
 
 msg will install golang $label as: `solve $goroot`
 
 cd $destination || die could not enter destination=$destination
 
 download
+g=`solve $goroot`
+if symlink_test $g; then
+    old_install=`symlink_get $g`
+    msg found symlink for old install: $old_install
+else
+    msg not found symlink for old install
+fi
 remove_old_link
 untar
 relink
+if [ -n "$old_install" ]; then
+    n=`solve $new_install`
+    if [ "$old_install" != "$n" ]; then
+	# remove only install only if it actually changed
+	msg removing old install: $old_install
+	rm -r $old_install
+    fi
+fi
 path
 
 msg golang $label installed at: `solve $goroot`
 
 test
 cleanup
+
+#
+# main section: end
+#
