@@ -3,6 +3,17 @@
 # update-golang
 update-golang is a script to easily fetch and install new Golang releases
 
+Table of Contents
+=================
+
+  * [How it works](#how-it-works)
+  * [Usage](#usage)
+  * [Caution](#caution)
+  * [Example](#example)
+  * [Customization](#customization)
+
+Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc.go)
+
 How it works
 ============
 
