@@ -120,6 +120,12 @@ path() {
     fi
 }
 
+test() {
+    gotool=`solve $goroot/bin/go`
+    msg testing $gotool:
+    $gotool version
+}
+
 msg will install golang $label as: `solve $goroot`
 
 cd $destination || die could not enter destination=$destination
@@ -132,4 +138,5 @@ path
 
 msg golang $label installed at: `solve $goroot`
 
+test
 cleanup
