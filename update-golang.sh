@@ -160,7 +160,7 @@ untar
 relink
 if [ -n "$old_install" ]; then
     if [ "$old_install" != "$abs_new_install" ]; then
-	# remove only install only if it actually changed
+	# remove old install only if it actually changed
 	msg removing old install: $old_install
 	rm -r $old_install
     fi
