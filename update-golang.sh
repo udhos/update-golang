@@ -104,6 +104,10 @@ path() {
     p=/etc/profile.d/golang_path.sh
     msg issuing path $b to $p
     echo "export PATH=\$PATH:$b" > $p
+    if [ "$b" != /usr/local/go/bin ]; then
+	msg setting up custom GOROOT=$b to $p
+	echo "export GOROOT=$b" >> $p
+    fi
 }
 
 msg will install golang $label as: `solve $goroot`
