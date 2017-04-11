@@ -110,8 +110,6 @@ untar() {
 }
 
 relink() {
-    local l=`solve $new_install`
-    local g=`solve $goroot`
     mv $abs_goroot $abs_new_install
     ln -s $abs_new_install $abs_goroot
 }
