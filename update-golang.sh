@@ -7,11 +7,12 @@ release=1.8.1
 
 os=`uname -s | tr [:upper:] [:lower:]`
 
-case `uname -m` in
+arch=`uname -m`
+case "$arch" in
     i*)
 	arch=386
 	;;
-    *)
+    x*)
         arch=amd64
 	;;
 esac
