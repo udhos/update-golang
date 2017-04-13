@@ -172,6 +172,7 @@ case "$1" in
     '')
 	;;
     *)
+	msg unknown option: $1
 	echo >&2 usage: $me [remove]
 	exit 1
 	;;
