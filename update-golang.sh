@@ -37,7 +37,7 @@ esac
 [ -n "$PROFILED" ] && profiled=$PROFILED
 
 show_vars() {
-cat >&2 <<EOF
+    cat >&2 <<EOF
 SOURCE=$source
 DESTINATION=$destination
 RELEASE=$release
