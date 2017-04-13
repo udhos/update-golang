@@ -11,8 +11,6 @@ msg() {
     echo >&2 $me: $*
 }
 
-msg version $version
-
 # defaults
 source=https://storage.googleapis.com/golang
 destination=/usr/local
@@ -38,6 +36,7 @@ esac
 [ -n "$ARCH" ] && arch=$ARCH
 [ -n "$PROFILED" ] && profiled=$PROFILED
 
+show_vars() {
 cat >&2 <<EOF
 SOURCE=$source
 DESTINATION=$destination
@@ -46,6 +45,7 @@ OS=$os
 ARCH=$arch
 PROFILED=$profiled
 EOF
+}
 
 label=go$release.$os-$arch
 filename=$label.tar.gz
@@ -140,9 +140,46 @@ symlink_get() {
     file $1 | awk '{print $NF}'
 }
 
+remove_golang() {
+    if symlink_test $abs_goroot; then
+	old_install=`symlink_get $abs_goroot`
+	msg found symlink for old install: $old_install
+	msg removing symlink: $abs_goroot
+	rm $abs_goroot
+	msg removing old install: $old_install
+	rm -r $old_install
+    else
+	msg not found symlink for old install
+    fi
+    
+    if [ -f "$abs_profiled" ]; then
+        msg removing: $abs_profiled
+	rm $abs_profiled
+    else
+        msg not found path injection: $abs_profiled
+    fi
+}
+
 #
 # main section: begin
 #
+
+case "$1" in
+    remove)
+	remove_golang
+	exit 0
+	;;
+    '')
+	;;
+    *)
+	echo >&2 usage: $me [remove]
+	exit 1
+	;;
+esac
+
+msg version $version
+
+show_vars
 
 msg will install golang $label as: $abs_goroot
 
