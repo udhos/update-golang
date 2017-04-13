@@ -148,19 +148,38 @@ path() {
 
 test() {
     local ret=1
+    local t="$abs_gotool version"
     if [ "$abs_goroot" != $default_goroot ]; then
-        msg testing: GOROOT=$abs_goroot $abs_gotool version
-	GOROOT=$abs_goroot $abs_gotool version
+        msg testing: GOROOT=$abs_goroot $t
+	GOROOT=$abs_goroot $t
 	ret=$?
     else
-        msg testing: $abs_gotool version
-	$abs_gotool version
+        msg testing: $t
+	$t
 	ret=$?
     fi
     if [ $ret -eq 0 ]; then
-	msg SUCCESS
+	msg $t: SUCCESS
     else
-	msg FAIL
+	msg $t FAIL
+    fi
+
+    local abs_hello=`solve hello.go`
+    ret=1
+    t="$abs_gotool run $abs_hello"
+    if [ "$abs_goroot" != $default_goroot ]; then
+        msg testing: GOROOT=$abs_goroot $t
+	GOROOT=$abs_goroot $t
+	ret=$?
+    else
+        msg testing: $t
+	$t
+	ret=$?
+    fi
+    if [ $ret -eq 0 ]; then
+	msg $t: SUCCESS
+    else
+	msg $t FAIL
     fi
 }
 
