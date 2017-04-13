@@ -142,7 +142,7 @@ symlink_get() {
 
 remove_golang() {
     if symlink_test $abs_goroot; then
-	old_install=`symlink_get $abs_goroot`
+	local old_install=`symlink_get $abs_goroot`
 	msg found symlink for old install: $old_install
 	msg removing symlink: $abs_goroot
 	rm $abs_goroot
@@ -163,6 +163,8 @@ remove_golang() {
 #
 # main section: begin
 #
+
+[ -d "$abs_profiled" ] && die "PROFILED=$profiled cannot be a directory"
 
 case "$1" in
     remove)
