@@ -4,7 +4,7 @@
 #
 # Home: https://github.com/udhos/update-golang
 
-version=0.2
+version=0.3
 
 me=`basename $0`
 msg() {
