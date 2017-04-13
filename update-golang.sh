@@ -114,12 +114,30 @@ relink() {
     ln -s $abs_new_install $abs_goroot
 }
 
+path_mark=update-golang.sh
+
+path_remove() {
+    if [ -f "$abs_profiled" ]; then
+	msg path: removing old settings from: $abs_profiled
+	local tmp=`mktemp -t`
+	if [ ! -f "$tmp" ]; then
+	    msg path: could not create temporary file: $tmp
+	    return
+	fi
+	grep -v $path_mark $abs_profiled > $tmp 
+	cp $tmp $abs_profiled
+    fi
+}
+
 path() {
-    msg issuing path $abs_gobin to $abs_profiled
-    echo "export PATH=\$PATH:$abs_gobin" > $abs_profiled
+    path_remove
+    
+    msg path: issuing new $abs_gobin to $abs_profiled
+    local dont_edit=";# DOT NOT EDIT: installed by $path_mark"
+    echo "export PATH=\$PATH:$abs_gobin $dont_edit" >> $abs_profiled
     if [ "$abs_gobin" != /usr/local/go/bin ]; then
-	msg setting up custom GOROOT=$abs_goroot to $abs_profiled
-	echo "export GOROOT=$abs_goroot" >> $abs_profiled
+	msg path: setting up custom GOROOT=$abs_goroot to $abs_profiled
+	echo "export GOROOT=$abs_goroot $dont_edit" >> $abs_profiled
     fi
 }
 
@@ -151,13 +169,8 @@ remove_golang() {
     else
 	msg not found symlink for old install
     fi
-    
-    if [ -f "$abs_profiled" ]; then
-        msg removing: $abs_profiled
-	rm $abs_profiled
-    else
-        msg not found path injection: $abs_profiled
-    fi
+
+    path_remove
 }
 
 #
