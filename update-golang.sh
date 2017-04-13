@@ -57,8 +57,10 @@ goroot=$destination/go
 filepath=$cache/$filename
 new_install=$destination/$label
 
+tmp= ;# will be set
 save_dir=$PWD
 cleanup() {
+    [ -n "$tmp" ] && [ -f "$tmp" ] && msg cleanup: $tmp && rm $tmp
     [ -n "$save_dir" ] && cd $save_dir
 }
 
@@ -122,7 +124,7 @@ path_mark=update-golang.sh
 path_remove() {
     if [ -f "$abs_profiled" ]; then
 	msg path: removing old settings from: $abs_profiled
-	local tmp=`mktemp -t`
+	tmp=`mktemp -t` ;# save for later removal
 	if [ ! -f "$tmp" ]; then
 	    msg path: could not create temporary file: $tmp
 	    return
