@@ -35,6 +35,8 @@ esac
 [ -n "$OS" ] && os=$OS
 [ -n "$ARCH" ] && arch=$ARCH
 [ -n "$PROFILED" ] && profiled=$PROFILED
+cache=$destination
+[ -n "$CACHE" ] && cache=$CACHE
 
 show_vars() {
     cat >&2 <<EOF
@@ -44,6 +46,7 @@ RELEASE=$release
 OS=$os
 ARCH=$arch
 PROFILED=$profiled
+CACHE=$cache
 EOF
 }
 
@@ -51,7 +54,7 @@ label=go$release.$os-$arch
 filename=$label.tar.gz
 url=$source/$filename
 goroot=$destination/go
-filepath=$destination/$filename
+filepath=$cache/$filename
 new_install=$destination/$label
 
 save_dir=$PWD
@@ -88,7 +91,7 @@ download() {
 	if [ -f "$abs_filepath" ]; then
 	    msg no need to download - file cached: $abs_filepath
 	else
-	    wget -O $filename $url || die could not download using wget from: $url
+	    wget -O $abs_filepath $url || die could not download using wget from: $url
 	fi
     else
 	msg $abs_url is local
