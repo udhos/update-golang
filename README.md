@@ -80,13 +80,28 @@ Customization
 
 These environment variables are available for customization:
 
-    SOURCE=https://storage.googleapis.com/golang
-    DESTINATION=/usr/local
-    RELEASE=1.8.1
-    OS=linux
-    ARCH=amd64
+    SOURCE=https://storage.googleapis.com/golang ;# download location
+    DESTINATION=/usr/local                       ;# install destination
+    RELEASE=1.8.1                                ;# golang release
+    OS=linux                                     ;# os
+    ARCH=amd64                                   ;# arch
+    PROFILED=/etc/profile.d/golang_path.sh       ;# update PATH, optionally set GOROOT
+    CACHE=/usr/local                             ;# cache downloads
 
 Example:
 
     $ sudo RELEASE=1.8 ./update-golang.sh
 
+Per-user Install
+================
+
+Default behavior is to install Golang globally for all system users.
+
+However you can use the environment variables to point locations to your per-user home directory.
+
+Example:
+
+    This example will install Golang under ~/golang for current user only.
+    
+    $ mkdir ~/golang
+    $ DESTINATION=~/golang PROFILED=~/.profile ./update-golang.sh

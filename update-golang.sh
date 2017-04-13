@@ -132,21 +132,32 @@ path_remove() {
     fi
 }
 
+default_goroot=/usr/local/go
+
 path() {
     path_remove
     
     msg path: issuing new $abs_gobin to $abs_profiled
     local dont_edit=";# DOT NOT EDIT: installed by $path_mark"
     echo "export PATH=\$PATH:$abs_gobin $dont_edit" >> $abs_profiled
-    if [ "$abs_gobin" != /usr/local/go/bin ]; then
+    if [ "$abs_goroot" != $default_goroot ]; then
 	msg path: setting up custom GOROOT=$abs_goroot to $abs_profiled
 	echo "export GOROOT=$abs_goroot $dont_edit" >> $abs_profiled
     fi
 }
 
 test() {
-    msg testing $abs_gotool:
-    if $abs_gotool version; then
+    local ret=1
+    if [ "$abs_goroot" != $default_goroot ]; then
+        msg testing: GOROOT=$abs_goroot $abs_gotool version
+	GOROOT=$abs_goroot $abs_gotool version
+	ret=$?
+    else
+        msg testing: $abs_gotool version
+	$abs_gotool version
+	ret=$?
+    fi
+    if [ $ret -eq 0 ]; then
 	msg SUCCESS
     else
 	msg FAIL
