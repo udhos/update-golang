@@ -101,8 +101,22 @@ download() {
     fi
 }
 
+symlink_test() {
+    file $1 | grep -q symbolic
+}
+
+symlink_get() {
+    file $1 | awk '{print $NF}'
+}
+
 remove_old_link() {
-    msg remove old link: $abs_goroot
+    if symlink_test $abs_goroot; then
+	abs_old_install=`symlink_get $abs_goroot`
+	msg remove_old_link: found symlink for old install: $abs_old_install
+    else
+	msg remove_old_link: not found symlink for old install
+    fi
+    
     [ -r $abs_goroot ] && rm $abs_goroot
     [ -r $abs_goroot ] && die could not remove existing golang directory: $abs_goroot
 }
@@ -185,14 +199,6 @@ test() {
     fi
 }
 
-symlink_test() {
-    file $1 | grep -q symbolic
-}
-
-symlink_get() {
-    file $1 | awk '{print $NF}'
-}
-
 remove_golang() {
     if symlink_test $abs_goroot; then
 	local old_install=`symlink_get $abs_goroot`
@@ -206,6 +212,16 @@ remove_golang() {
     fi
 
     path_remove
+}
+
+remove_old_install() {
+    if [ -n "$abs_old_install" ]; then
+	if [ "$abs_old_install" != "$abs_new_install" ]; then
+	    # remove old install only if it actually changed
+	    msg removing old install: $abs_old_install
+	    rm -r $abs_old_install
+	fi
+    fi
 }
 
 #
@@ -237,22 +253,10 @@ msg will install golang $label as: $abs_goroot
 cd $destination || die could not enter destination=$destination
 
 download
-if symlink_test $abs_goroot; then
-    old_install=`symlink_get $abs_goroot`
-    msg found symlink for old install: $old_install
-else
-    msg not found symlink for old install
-fi
 remove_old_link
 untar
 relink
-if [ -n "$old_install" ]; then
-    if [ "$old_install" != "$abs_new_install" ]; then
-	# remove old install only if it actually changed
-	msg removing old install: $old_install
-	rm -r $old_install
-    fi
-fi
+remove_old_install
 path
 
 msg golang $label installed at: $abs_goroot
