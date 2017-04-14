@@ -122,10 +122,15 @@ remove_old_link() {
 }
 
 untar() {
-    msg untar: rm -rf $abs_new_install
-    rm -rf $abs_new_install
-    msg untar: tar xf $abs_filepath
-    tar xf $abs_filepath || die could not untar: $abs_filepath
+    if [ -d "$abs_new_install" ]; then
+	msg untar: rm -r $abs_new_install
+	rm -r $abs_new_install || die untar: could not remove: $abs_new_install
+    fi
+    [ -d "$PWD" ] || die untar: not a directory: $PWD
+    [ -w "$PWD" ] || die untar: unable to write: $PWD
+    local cmd="tar -x --no-ignore-command-error -f $abs_filepath"
+    msg untar: $cmd
+    $cmd || die untar: failed: $abs_filepath
 }
 
 relink() {
