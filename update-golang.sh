@@ -11,6 +11,12 @@ msg() {
     echo >&2 $me: $*
 }
 
+log_stdin() {
+    while read i; do
+	msg $i
+    done
+}
+
 # defaults
 source=https://storage.googleapis.com/golang
 destination=/usr/local
@@ -39,7 +45,7 @@ cache=$destination
 [ -n "$CACHE" ] && cache=$CACHE
 
 show_vars() {
-    cat >&2 <<EOF
+    cat <<EOF
 SOURCE=$source
 DESTINATION=$destination
 RELEASE=$release
@@ -172,11 +178,11 @@ test() {
     local t="$abs_gotool version"
     if [ "$abs_goroot" != $default_goroot ]; then
         msg testing: GOROOT=$abs_goroot $t
-	GOROOT=$abs_goroot $t
+	GOROOT=$abs_goroot $t | log_stdin
 	ret=$?
     else
         msg testing: $t
-	$t
+	$t | log_stdin
 	ret=$?
     fi
     if [ $ret -eq 0 ]; then
@@ -190,11 +196,11 @@ test() {
     t="$abs_gotool run $abs_hello"
     if [ "$abs_goroot" != $default_goroot ]; then
         msg testing: GOROOT=$abs_goroot $t
-	GOROOT=$abs_goroot $t
+	GOROOT=$abs_goroot $t | log_stdin
 	ret=$?
     else
         msg testing: $t
-	$t
+	$t | log_stdin
 	ret=$?
     fi
     if [ $ret -eq 0 ]; then
@@ -251,7 +257,7 @@ esac
 
 msg version $version
 
-show_vars
+show_vars | log_stdin
 
 msg will install golang $label as: $abs_goroot
 
