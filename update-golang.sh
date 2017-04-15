@@ -33,6 +33,9 @@ case "$arch" in
     x*)
         arch=amd64
 	;;
+    aarch64)
+        arch=armv6l
+	;;
 esac
 
 [ -n "$SOURCE" ] && source=$SOURCE
