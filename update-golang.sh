@@ -238,6 +238,10 @@ remove_old_install() {
     fi
 }
 
+show_version() {
+    msg version $version
+}
+
 #
 # main section: begin
 #
@@ -245,6 +249,10 @@ remove_old_install() {
 [ -d "$abs_profiled" ] && die "PROFILED=$profiled cannot be a directory"
 
 case "$1" in
+    -v)
+	show_version
+	exit 0
+	;;
     remove)
 	remove_golang
 	exit 0
@@ -253,12 +261,12 @@ case "$1" in
 	;;
     *)
 	msg unknown option: $1
-	echo >&2 usage: $me [remove]
+	echo >&2 usage: $me [-v] [remove]
 	exit 1
 	;;
 esac
 
-msg version $version
+show_version
 
 show_vars | log_stdin
 
