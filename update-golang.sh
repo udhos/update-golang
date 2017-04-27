@@ -27,6 +27,9 @@ os=`uname -s | tr [:upper:] [:lower:]`
 
 arch=`uname -m`
 case "$arch" in
+    a*)
+	arch=armv6l
+	;;
     i*)
 	arch=386
 	;;
