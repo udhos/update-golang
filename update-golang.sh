@@ -48,6 +48,8 @@ cache=$destination
 [ -n "$CACHE" ] && cache=$CACHE
 
 show_vars() {
+    echo user: `id`
+    
     cat <<EOF
 SOURCE=$source
 DESTINATION=$destination
@@ -56,6 +58,7 @@ OS=$os
 ARCH=$arch
 PROFILED=$profiled
 CACHE=$cache
+GOPATH=$GOPATH
 EOF
 }
 
@@ -166,10 +169,17 @@ default_goroot=/usr/local/go
 
 path() {
     path_remove
-    
+
     msg path: issuing new $abs_gobin to $abs_profiled
     local dont_edit=";# DOT NOT EDIT: installed by $path_mark"
     echo "export PATH=\$PATH:$abs_gobin $dont_edit" >> $abs_profiled
+
+    local user_gobin=
+    [ -n "$GOPATH" ] && user_gobin=`echo "$GOPATH" | awk -F: '{print $1}'`/bin
+    [ -z "$user_gobin" ] && user_gobin=$HOME/go/bin
+    msg path: issuing $user_gobin to $abs_profiled
+    echo "export PATH=\$PATH:$user_gobin $dont_edit" >> $abs_profiled
+
     if [ "$abs_goroot" != $default_goroot ]; then
 	msg path: setting up custom GOROOT=$abs_goroot to $abs_profiled
 	echo "export GOROOT=$abs_goroot $dont_edit" >> $abs_profiled
