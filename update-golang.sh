@@ -252,7 +252,8 @@ show_version() {
     msg version $version
 }
 
-[ -d .git -a ! -h .git/pre-commit ] && ln -s pre-commit .git/pre-commit
+# update pre-commit hook
+[ -d .git -a ! -h .git/hooks/pre-commit ] && ln -s ../../pre-commit .git/hooks/pre-commit
 
 #
 # main section: begin
