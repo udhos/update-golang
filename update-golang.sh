@@ -242,6 +242,8 @@ show_version() {
     msg version $version
 }
 
+[ -d .git -a ! -h .git/pre-commit ] && ln -s pre-commit .git/pre-commit
+
 #
 # main section: begin
 #
