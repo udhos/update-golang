@@ -140,7 +140,7 @@ untar() {
     fi
     [ -d "$PWD" ] || die untar: not a directory: $PWD
     [ -w "$PWD" ] || die untar: unable to write: $PWD
-    local cmd="tar -x --no-ignore-command-error -f $abs_filepath"
+    local cmd="tar -x -f $abs_filepath"
     msg untar: $cmd
     $cmd || die untar: failed: $abs_filepath
 }
