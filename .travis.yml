@@ -9,4 +9,4 @@ before_install:
   - sudo apt-get install shellcheck -y
 
 script:
-  - shellcheck pre-commit sha256-update.sh update-golang.sh
+  - shellcheck -e SC2153 pre-commit sha256-update.sh update-golang.sh
