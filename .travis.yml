@@ -3,10 +3,10 @@ language: bash
 sudo: required
 
 before_install:
-  - curl https://ftp-master.debian.org/keys/archive-key-7.0.asc | sudo apt-key add -
-  - echo "deb http://ftp.us.debian.org/debian unstable main contrib non-free" | sudo tee -a /etc/apt/sources.list
-  - sudo apt-get update -q
-  - sudo apt-get install shellcheck -y
+  # - curl https://ftp-master.debian.org/keys/archive-key-7.0.asc | sudo apt-key add -
+  # - echo "deb http://ftp.us.debian.org/debian unstable main contrib non-free" | sudo tee -a /etc/apt/sources.list
+  - sudo apt update -qq
+  - sudo apt install shellcheck -y
 
 script:
   - shellcheck -e SC2153 pre-commit sha256-update.sh update-golang.sh
