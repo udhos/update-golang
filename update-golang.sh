@@ -92,7 +92,9 @@ solve() {
     local p=
     if echo "$path" | egrep -q ^/; then
 	p="$path"
-        debug solve: "$p": `file "$p"`
+	local m=
+	m=$(file "$p")
+        debug "solve: $p: $m"
     else
 	p="$save_dir/$path"
     fi
