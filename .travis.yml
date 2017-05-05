@@ -2,10 +2,10 @@ language: bash
 
 addons:
   apt:
+    sources:
+    - debian-sid
     packages:
     - shellcheck
-    sources:
-    - debian-sid # Grab ShellCheck from the Debian repo
 	
 script:
   - shellcheck pre-commit sha256-update.sh update-golang.sh
