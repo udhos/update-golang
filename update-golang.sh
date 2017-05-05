@@ -124,16 +124,18 @@ download() {
 }
 
 symlink_test() {
-    file "$1" | grep -q symbolic
+    #file "$1" | grep -q symbolic
+    readlink "$1" >/dev/null
 }
 
 symlink_get() {
-    local f=
-    f=$(file "$1")
-    local j=
-    j=$(echo "$f" | awk '{print $NF}')
-    debug "symlink_get: $1: [$f]: [$j]"
-    echo "$j"
+    #local f=
+    #local j=
+    #f=$(file "$1")
+    #j=$(echo "$f" | awk '{print $NF}')
+    #debug "symlink_get: $1: [$f]: [$j]"
+    #echo "$j"
+    readlink "$1"
 }
 
 remove_old_link() {
