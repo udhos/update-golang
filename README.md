@@ -1,5 +1,5 @@
 [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/udhos/update-golang/blob/master/LICENSE)
-
+[![Travis Build Status](https://travis-ci.org/udhos/update-golang.svg?branch=master)](https://travis-ci.org/udhos/update-golang)
 [![asciicast](https://asciinema.org/a/660zn8wdnjzriy1ac0cqa7mou.png)](https://asciinema.org/a/660zn8wdnjzriy1ac0cqa7mou)
 
 # update-golang
