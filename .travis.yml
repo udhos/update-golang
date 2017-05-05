@@ -1,5 +1,7 @@
 language: bash
 
+sudo: required
+
 addons:
   apt:
     sources:
