@@ -227,13 +227,13 @@ remove_golang() {
     if symlink_test "$abs_goroot"; then
         local old_install=
         old_install=$(symlink_get "$abs_goroot")
-        msg found symlink for old install: "$old_install"
-        msg removing symlink: "$abs_goroot"
+        msg remove: found symlink for old install: "$old_install"
+        msg remove: removing symlink: "$abs_goroot"
         rm "$abs_goroot"
-        msg removing old install: "$old_install"
+        msg remove: removing dir: "$old_install"
         rm -r "$old_install"
     else
-        msg not found symlink for old install
+        msg remove: not found symlink for old install
     fi
 
     path_remove
