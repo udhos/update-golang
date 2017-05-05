@@ -5,9 +5,5 @@ addons:
     packages:
     - shellcheck
 
-install:
-  - go get github.com/golang/lint/golint
-  - go get honnef.co/go/simple/cmd/gosimple
-
 script:
   - shellcheck pre-commit sha256-update.sh update-golang.sh
