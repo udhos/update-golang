@@ -11,6 +11,10 @@ msg() {
     echo >&2 "$me": "$*"
 }
 
+debug() {
+    [ -n "$DEBUG" ] && msg debug: "$*"
+}
+
 log_stdin() {
     while read -r i; do
 	msg "$i"
@@ -59,6 +63,7 @@ ARCH=$arch
 PROFILED=$profiled
 CACHE=$cache
 GOPATH=$GOPATH
+DEBUG=$DEBUG
 EOF
 }
 
@@ -84,11 +89,14 @@ die() {
 
 solve() {
     local path=$1
+    local p=
     if echo "$path" | egrep -q ^/; then
-	echo "$path"
+	p="$path"
+        debug solve: "$p": `file "$p"`
     else
-	echo "$save_dir/$path"
+	p="$save_dir/$path"
     fi
+    echo "$p"
 }
 
 abs_filepath=$(solve "$filepath")
@@ -132,10 +140,15 @@ remove_old_link() {
     [ -r "$abs_goroot" ] && die could not remove existing golang directory: "$abs_goroot"
 }
 
+rm_dir() {
+    local dir=$1
+    rm -r "$dir"
+}
+
 untar() {
     if [ -d "$abs_new_install" ]; then
-        msg untar: rm -r "$abs_new_install"
-        rm -r "$abs_new_install" || die untar: could not remove: "$abs_new_install"
+        msg untar: rm_dir "$abs_new_install"
+        rm_dir "$abs_new_install" || die untar: could not remove: "$abs_new_install"
     fi
     [ -d "$PWD" ] || die untar: not a directory: "$PWD"
     [ -w "$PWD" ] || die untar: unable to write: "$PWD"
@@ -231,7 +244,7 @@ remove_golang() {
         msg remove: removing symlink: "$abs_goroot"
         rm "$abs_goroot"
         msg remove: removing dir: "$old_install"
-        rm -r "$old_install"
+        rm_dir "$old_install"
     else
         msg remove: not found symlink for old install
     fi
@@ -244,7 +257,7 @@ remove_old_install() {
 	if [ "$abs_old_install" != "$abs_new_install" ]; then
             # remove old install only if it actually changed
             msg removing old install: "$abs_old_install"
-            rm -r "$abs_old_install"
+            rm_dir "$abs_old_install"
 	fi
     fi
 }
