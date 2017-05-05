@@ -1,5 +1,7 @@
 #! /bin/sh
 
-sha256sum update-golang.sh > update-golang.sh.sha256
+out=update-golang.sh.sha256
 
-echo update-golang.sh.sha256
+sha256sum update-golang.sh > $out
+
+echo $out
