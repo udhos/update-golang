@@ -284,7 +284,7 @@ case "$1" in
     ;;
     *)
     msg unknown option: "$1"
-    echo >&2 usage: "$me" [-v] [remove]
+    echo >&2 usage: "$me [-v] [remove]"
     exit 1
     ;;
 esac
