@@ -11,4 +11,7 @@ before_install:
 script:
   - shellcheck -e SC2153 pre-commit sha256-update.sh update-golang.sh
   - sudo ./update-golang.sh
+  - sudo ./update-golang.sh
+  - ls -al /usr/local
   - sudo ./update-golang.sh remove
+  - ls -al /usr/local
