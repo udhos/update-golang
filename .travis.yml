@@ -7,6 +7,6 @@ before_install:
   - echo "deb http://ftp.us.debian.org/debian unstable main contrib non-free" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get update -q
   - sudo apt-get install shellcheck -y
-	
+
 script:
   - shellcheck pre-commit sha256-update.sh update-golang.sh
