@@ -13,7 +13,7 @@ msg() {
 
 log_stdin() {
     while read -r i; do
-    msg "$i"
+	msg "$i"
     done
 }
 
@@ -28,14 +28,14 @@ os=$(uname -s | tr "[:upper:]" "[:lower:]")
 arch=$(uname -m)
 case "$arch" in
     i*)
-    arch=386
-    ;;
+	arch=386
+	;;
     x*)
         arch=amd64
-    ;;
+	;;
     aarch64)
         arch=armv6l
-    ;;
+	;;
 esac
 
 [ -n "$SOURCE" ] && source=$SOURCE
@@ -48,7 +48,7 @@ cache=$destination
 [ -n "$CACHE" ] && cache=$CACHE
 
 show_vars() {
-        echo user: "$(id)"
+    echo user: "$(id)"
     
     cat <<EOF
 SOURCE=$source
@@ -85,9 +85,9 @@ die() {
 solve() {
     local path=$1
     if echo "$path" | egrep -q ^/; then
-    echo "$path"
+	echo "$path"
     else
-    echo "$save_dir/$path"
+	echo "$save_dir/$path"
     fi
 }
 
@@ -101,15 +101,15 @@ abs_profiled=$(solve "$profiled")
 
 download() {
     if echo "$url" | egrep -q '^https?:'; then
-    msg "$url" is remote
-    if [ -f "$abs_filepath" ]; then
-        msg no need to download - file cached: "$abs_filepath"
+	msg "$url" is remote
+	if [ -f "$abs_filepath" ]; then
+            msg no need to download - file cached: "$abs_filepath"
+	else
+            wget -O "$abs_filepath" "$url" || die could not download using wget from: "$url"
+	fi
     else
-        wget -O "$abs_filepath" "$url" || die could not download using wget from: "$url"
-    fi
-    else
-    msg "$abs_url" is local
-    cp "$abs_url" . || die could not copy from: "$abs_url"
+	msg "$abs_url" is local
+	cp "$abs_url" . || die could not copy from: "$abs_url"
     fi
 }
 
@@ -122,10 +122,9 @@ symlink_get() {
 }
 
 remove_old_link() {
-    if symlink_test "$abs_goroot";
-    then
+    if symlink_test "$abs_goroot"; then
         abs_old_install=$(symlink_get "$abs_goroot")
-         msg remove_old_link: found symlink for old install: "$abs_old_install"
+        msg remove_old_link: found symlink for old install: "$abs_old_install"
     else
         msg remove_old_link: not found symlink for old install
     fi
@@ -134,8 +133,7 @@ remove_old_link() {
 }
 
 untar() {
-    if [ -d "$abs_new_install" ];
-    then
+    if [ -d "$abs_new_install" ]; then
         msg untar: rm -r "$abs_new_install"
         rm -r "$abs_new_install" || die untar: could not remove: "$abs_new_install"
     fi
@@ -154,18 +152,16 @@ relink() {
 path_mark=update-golang.sh
 
 path_remove() {
-    if [ -f "$abs_profiled" ];
-    then
+    if [ -f "$abs_profiled" ]; then
         msg path: removing old settings from: "$abs_profiled"
         tmp=$(mktemp -t) # save for later removal
-        if [ ! -f "$tmp" ];
-        then
-                msg path: could not create temporary file: "$tmp"
-                return
+        if [ ! -f "$tmp" ]; then
+            msg path: could not create temporary file: "$tmp"
+            return
         fi
         grep -v "$path_mark" "$abs_profiled" > "$tmp"
         cp "$tmp" "$abs_profiled"
-fi
+    fi
 }
 
 default_goroot=/usr/local/go
@@ -183,8 +179,7 @@ path() {
     msg path: issuing "$user_gobin" to "$abs_profiled"
     echo "export PATH=\$PATH:$user_gobin $dont_edit" >> "$abs_profiled"
 
-    if [ "$abs_goroot" != $default_goroot ]; 
-    then
+    if [ "$abs_goroot" != $default_goroot ]; then
         msg path: setting up custom GOROOT="$abs_goroot" to "$abs_profiled"
         echo "export GOROOT=$abs_goroot $dont_edit" >> "$abs_profiled"
     fi
@@ -193,8 +188,7 @@ path() {
 test() {
     local ret=1
     local t="$abs_gotool version"
-    if [ "$abs_goroot" != $default_goroot ];
-    then
+    if [ "$abs_goroot" != $default_goroot ]; then
         msg testing: GOROOT="$abs_goroot" "$t"
         GOROOT=$abs_goroot $t | log_stdin
         ret=$?
@@ -203,8 +197,7 @@ test() {
         $t | log_stdin
         ret=$?
     fi
-    if [ $ret -eq 0 ];
-    then
+    if [ $ret -eq 0 ]; then
         msg "$t": SUCCESS
     else
         msg "$t" FAIL
@@ -214,8 +207,7 @@ test() {
     abs_hello=$(solve hello.go)
     ret=1
     t="$abs_gotool run $abs_hello"
-    if [ "$abs_goroot" != $default_goroot ];
-    then
+    if [ "$abs_goroot" != $default_goroot ]; then
         msg testing: GOROOT="$abs_goroot" "$t"
         GOROOT=$abs_goroot $t | log_stdin
         ret=$?
@@ -232,8 +224,7 @@ test() {
 }
 
 remove_golang() {
-    if symlink_test "$abs_goroot";
-    then
+    if symlink_test "$abs_goroot"; then
         local old_install=
         old_install=$(symlink_get "$abs_goroot")
         msg found symlink for old install: "$old_install"
@@ -250,11 +241,11 @@ remove_golang() {
 
 remove_old_install() {
     if [ -n "$abs_old_install" ]; then
-    if [ "$abs_old_install" != "$abs_new_install" ]; then
-        # remove old install only if it actually changed
-        msg removing old install: "$abs_old_install"
-        rm -r "$abs_old_install"
-    fi
+	if [ "$abs_old_install" != "$abs_new_install" ]; then
+            # remove old install only if it actually changed
+            msg removing old install: "$abs_old_install"
+            rm -r "$abs_old_install"
+	fi
     fi
 }
 
@@ -273,20 +264,20 @@ show_version() {
 
 case "$1" in
     -v)
-    show_version
-    exit 0
-    ;;
+	show_version
+	exit 0
+	;;
     remove)
-    remove_golang
-    exit 0
-    ;;
+	remove_golang
+	exit 0
+	;;
     '')
-    ;;
+	;;
     *)
-    msg unknown option: "$1"
-    echo >&2 usage: "$me [-v] [remove]"
-    exit 1
-    ;;
+	msg unknown option: "$1"
+	echo >&2 usage: "$me [-v] [remove]"
+	exit 1
+	;;
 esac
 
 show_version
