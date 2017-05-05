@@ -128,7 +128,12 @@ symlink_test() {
 }
 
 symlink_get() {
-    file "$1" | awk '{print $NF}'
+    local f=
+    f=$(file "$1")
+    local j=
+    j=$(echo "$f" | awk '{print $NF}')
+    debug "symlink_get: $1: [$j]"
+    echo "$j"
 }
 
 remove_old_link() {
