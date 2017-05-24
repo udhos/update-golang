@@ -76,9 +76,11 @@ new_install=$destination/$label
 
 tmp= ;# will be set
 save_dir=$PWD
+previous_install= ;# will be set
 cleanup() {
     [ -n "$tmp" ] && [ -f "$tmp" ] && msg cleanup: $tmp && rm $tmp
     [ -n "$save_dir" ] && cd "$save_dir" || exit 1
+    [ -n "$previous_install" ] && msg remember to delete previous install saved as: $previous_install
 }
 
 die() {
@@ -142,10 +144,16 @@ remove_old_link() {
     if symlink_test "$abs_goroot"; then
         abs_old_install=$(symlink_get "$abs_goroot")
         msg remove_old_link: found symlink for old install: "$abs_old_install"
+    	[ -r "$abs_goroot" ] && rm "$abs_goroot"
     else
         msg remove_old_link: not found symlink for old install
+    	if [ -r "$abs_goroot" ]; then
+		local now=$(date +%Y%m%d-%H%M%S)
+		mv "$abs_goroot" "$abs_goroot-$now" || die could not rename existing goland directory: "$abs_goroot"
+		previous_install="$abs_goroot-$now"
+		msg previous install renamed to: $previous_install
+	fi
     fi
-    [ -r "$abs_goroot" ] && rm "$abs_goroot"
     [ -r "$abs_goroot" ] && die could not remove existing golang directory: "$abs_goroot"
 }
 
