@@ -80,7 +80,7 @@ previous_install= ;# will be set
 cleanup() {
     [ -n "$tmp" ] && [ -f "$tmp" ] && msg cleanup: $tmp && rm $tmp
     [ -n "$save_dir" ] && cd "$save_dir" || exit 1
-    [ -n "$previous_install" ] && msg remember to delete previous install saved as: $previous_install
+    [ -n "$previous_install" ] && msg remember to delete previous install saved as: "$previous_install"
 }
 
 die() {
@@ -148,10 +148,11 @@ remove_old_link() {
     else
         msg remove_old_link: not found symlink for old install
     	if [ -r "$abs_goroot" ]; then
-		local now=$(date +%Y%m%d-%H%M%S)
+		local now
+		now=$(date +%Y%m%d-%H%M%S)
 		mv "$abs_goroot" "$abs_goroot-$now" || die could not rename existing goland directory: "$abs_goroot"
 		previous_install="$abs_goroot-$now"
-		msg previous install renamed to: $previous_install
+		msg previous install renamed to: "$previous_install"
 	fi
     fi
     [ -r "$abs_goroot" ] && die could not remove existing golang directory: "$abs_goroot"
