@@ -331,6 +331,8 @@ msg golang "$label" installed at: "$abs_goroot"
 test
 cleanup
 
+exit 0
+
 #
 # main section: end
 #
