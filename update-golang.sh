@@ -79,14 +79,14 @@ save_dir=$PWD
 previous_install= ;# will be set
 cleanup() {
     [ -n "$tmp" ] && [ -f "$tmp" ] && msg cleanup: $tmp && rm $tmp
-    [ -n "$save_dir" ] && cd "$save_dir" || exit 1
+    [ -n "$save_dir" ] && cd "$save_dir" || exit 2
     [ -n "$previous_install" ] && msg remember to delete previous install saved as: "$previous_install"
 }
 
 die() {
-    msg "$*"
+    msg "die: $*"
     cleanup
-    exit 1
+    exit 3
 }
 
 solve() {
