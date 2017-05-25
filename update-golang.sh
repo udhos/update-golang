@@ -117,7 +117,7 @@ download() {
 	if [ -f "$abs_filepath" ]; then
             msg no need to download - file cached: "$abs_filepath"
 	else
-	    if echo "$OS" | egrep -q "linux"; then
+	    if hash wget 2>/dev/null; then
               wget -O "$abs_filepath" "$url" || die could not download using wget from: "$url"
             else
               curl -o "$abs_filepath" "$url"
