@@ -117,7 +117,11 @@ download() {
 	if [ -f "$abs_filepath" ]; then
             msg no need to download - file cached: "$abs_filepath"
 	else
-            wget -O "$abs_filepath" "$url" || die could not download using wget from: "$url"
+	    if echo "$OS" | egrep -q "linux"; then
+              wget -O "$abs_filepath" "$url" || die could not download using wget from: "$url"
+            else
+              curl -o "$abs_filepath" "$url"
+            fi
 	fi
     else
 	msg "$abs_url" is local
