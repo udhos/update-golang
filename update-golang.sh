@@ -24,7 +24,7 @@ log_stdin() {
 # defaults
 source=https://storage.googleapis.com/golang
 destination=/usr/local
-release=1.8.1
+release=1.8.3
 profiled=/etc/profile.d/golang_path.sh
 
 os=$(uname -s | tr "[:upper:]" "[:lower:]")
