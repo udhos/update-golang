@@ -119,8 +119,10 @@ download() {
 	else
 	    if hash wget 2>/dev/null; then
               wget -O "$abs_filepath" "$url" || die could not download using wget from: "$url"
+	      [ -f "$abs_filepath" ] || die missing file downloaded with wget: "$abs_filepath"
             else
-              curl -o "$abs_filepath" "$url"
+              curl -o "$abs_filepath" "$url" || die could not download using curl from: "$url"
+	      [ -f "$abs_filepath" ] || die missing file downloaded with curl: "$abs_filepath"
             fi
 	fi
     else
