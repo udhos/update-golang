@@ -3,6 +3,8 @@
 # update-golang is a script to easily fetch and install new Golang releases
 #
 # Home: https://github.com/udhos/update-golang
+#
+# PIPETHIS_AUTHOR udhos
 
 version=0.7
 
