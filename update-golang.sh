@@ -242,8 +242,9 @@ test() {
         msg "$t" FAIL
     fi
 
-    local hello=$(mktemp -t hello-tmpXXXXXXXX.go)
-    cat >$hello <<__EOF__
+    local hello=
+    hello=$(mktemp -t hello-tmpXXXXXXXX.go)
+    cat >"$hello" <<__EOF__
 package main
 
 import "fmt"
@@ -254,7 +255,7 @@ func main() {
 __EOF__
 
     local abs_hello=
-    abs_hello=$(solve $hello)
+    abs_hello=$(solve "$hello")
     ret=1
     t="$abs_gotool run $abs_hello"
     if [ "$abs_goroot" != $default_goroot ]; then
@@ -272,7 +273,7 @@ __EOF__
         msg "$t" FAIL
     fi
 
-    rm $hello
+    rm "$hello"
 }
 
 remove_golang() {
