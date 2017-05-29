@@ -242,8 +242,19 @@ test() {
         msg "$t" FAIL
     fi
 
+    local hello=$(mktemp -t hello-tmpXXXXXXXX.go)
+    cat >$hello <<__EOF__
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Printf("hello, world\n")
+}
+__EOF__
+
     local abs_hello=
-    abs_hello=$(solve hello.go)
+    abs_hello=$(solve $hello)
     ret=1
     t="$abs_gotool run $abs_hello"
     if [ "$abs_goroot" != $default_goroot ]; then
@@ -260,6 +271,8 @@ test() {
     else
         msg "$t" FAIL
     fi
+
+    rm $hello
 }
 
 remove_golang() {
