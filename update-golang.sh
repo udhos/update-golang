@@ -8,6 +8,8 @@
 
 version=0.7
 
+set -o pipefail
+
 me=$(basename "$0")
 msg() {
     echo >&2 "$me": "$*"
