@@ -28,10 +28,13 @@ source=https://storage.googleapis.com/golang
 destination=/usr/local
 release=1.8.3
 profiled=/etc/profile.d/golang_path.sh
+arch_probe="uname -m"
 
 os=$(uname -s | tr "[:upper:]" "[:lower:]")
 
-arch=$(uname -m)
+[ -n "$ARCH_PROBE" ] && arch_probe="$ARCH_PROBE"
+
+arch=$($arch_probe)
 case "$arch" in
     i*)
 	arch=386
@@ -40,6 +43,9 @@ case "$arch" in
         arch=amd64
 	;;
     aarch64)
+        arch=armv6l
+	;;
+    armv7l)
         arch=armv6l
 	;;
 esac
@@ -61,6 +67,7 @@ SOURCE=$source
 DESTINATION=$destination
 RELEASE=$release
 OS=$os
+ARCH_PROBE=$arch_probe
 ARCH=$arch
 PROFILED=$profiled
 CACHE=$cache
