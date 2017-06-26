@@ -52,44 +52,46 @@ Example
 =======
 
     $ sudo ./update-golang.sh
-    [sudo] password for lab:
-    update-golang.sh: version 0.5
+    update-golang.sh: version 0.8
     update-golang.sh: user: uid=0(root) gid=0(root) groups=0(root)
     update-golang.sh: SOURCE=https://storage.googleapis.com/golang
     update-golang.sh: DESTINATION=/usr/local
-    update-golang.sh: RELEASE=1.8.1
+    update-golang.sh: RELEASE=1.8.3
     update-golang.sh: OS=linux
+    update-golang.sh: ARCH_PROBE=uname -m
     update-golang.sh: ARCH=amd64
     update-golang.sh: PROFILED=/etc/profile.d/golang_path.sh
     update-golang.sh: CACHE=/usr/local
     update-golang.sh: GOPATH=
-    update-golang.sh: will install golang go1.8.1.linux-amd64 as: /usr/local/go
-    update-golang.sh: https://storage.googleapis.com/golang/go1.8.1.linux-amd64.tar.gz is remote
-    --2017-05-03 12:18:33--  https://storage.googleapis.com/golang/go1.8.1.linux-amd64.tar.gz
-    Resolving storage.googleapis.com (storage.googleapis.com)... 216.58.202.16
-    Connecting to storage.googleapis.com (storage.googleapis.com)|216.58.202.16|:443... connected.
+    update-golang.sh: DEBUG=
+    update-golang.sh: will install golang go1.8.3.linux-amd64 as: /usr/local/go
+    update-golang.sh: https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz is remote
+    --2017-06-26 17:56:13--  https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz
+    Resolving storage.googleapis.com (storage.googleapis.com)... 172.217.29.176
+    Connecting to storage.googleapis.com (storage.googleapis.com)|172.217.29.176|:443... connected.
     HTTP request sent, awaiting response... 200 OK
-    Length: 91277742 (87M) [application/x-gzip]
-    Saving to: ‘/usr/local/go1.8.1.linux-amd64.tar.gz’
+    Length: 90029041 (86M) [application/x-gzip]
+    Saving to: ‘/usr/local/go1.8.3.linux-amd64.tar.gz’
 
-    /usr/local/go1.8.1.linux-amd64.tar.gz             100%[==========================================================================================================>]  87.05M  11.3MB/s    in 8.4s
+    /usr/local/go1.8.3.linux-amd64.tar.gz  100%[=========================================================================>]  85.86M  11.3MB/s    in 8.3s
 
-    2017-05-03 12:18:42 (10.4 MB/s) - ‘/usr/local/go1.8.1.linux-amd64.tar.gz’ saved [91277742/91277742]
+    2017-06-26 17:56:22 (10.4 MB/s) - ‘/usr/local/go1.8.3.linux-amd64.tar.gz’ saved [90029041/90029041]
 
-    update-golang.sh: remove_old_link: not found symlink for old install
-    update-golang.sh: untar: tar -x -f /usr/local/go1.8.1.linux-amd64.tar.gz
+    update-golang.sh: remove_old_link: found symlink for old install: /usr/local/go1.8.3.linux-amd64
+    update-golang.sh: untar: rm_dir /usr/local/go1.8.3.linux-amd64
+    update-golang.sh: untar: tar -x -f /usr/local/go1.8.3.linux-amd64.tar.gz
     update-golang.sh: path: removing old settings from: /etc/profile.d/golang_path.sh
     update-golang.sh: path: issuing new /usr/local/go/bin to /etc/profile.d/golang_path.sh
     update-golang.sh: path: issuing /home/lab/go/bin to /etc/profile.d/golang_path.sh
-    update-golang.sh: golang go1.8.1.linux-amd64 installed at: /usr/local/go
+    update-golang.sh: golang go1.8.3.linux-amd64 installed at: /usr/local/go
     update-golang.sh: testing: /usr/local/go/bin/go version
-    update-golang.sh: go version go1.8.1 linux/amd64
+    update-golang.sh: go version go1.8.3 linux/amd64
     update-golang.sh: /usr/local/go/bin/go version: SUCCESS
-    update-golang.sh: testing: /usr/local/go/bin/go run /home/lab/update-golang/hello.go
+    update-golang.sh: testing: /usr/local/go/bin/go run /tmp/hello-tmpkm4kq4dB.go
     update-golang.sh: hello, world
-    update-golang.sh: /usr/local/go/bin/go run /home/lab/update-golang/hello.go: SUCCESS
-    update-golang.sh: cleanup: /tmp/tmp.uVagnlB8QA
-    $ 
+    update-golang.sh: /usr/local/go/bin/go run /tmp/hello-tmpkm4kq4dB.go: SUCCESS
+    update-golang.sh: cleanup: /tmp/tmp.cDSO2HTGvV
+    $
 
 Customization
 =============
