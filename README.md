@@ -98,15 +98,19 @@ These environment variables are available for customization:
 
     SOURCE=https://storage.googleapis.com/golang ;# download location
     DESTINATION=/usr/local                       ;# install destination
-    RELEASE=1.8.1                                ;# golang release
+    RELEASE=1.8.3                                ;# golang release
     OS=linux                                     ;# os
+    ARCH_PROBE=uname -m                          ;# arch detection
     ARCH=amd64                                   ;# arch
     PROFILED=/etc/profile.d/golang_path.sh       ;# update PATH, optionally set GOROOT
     CACHE=/usr/local                             ;# cache downloads
+    GOPATH=
+    DEBUG=
+
 
 Example:
 
-    $ sudo RELEASE=1.8 ./update-golang.sh
+    $ sudo RELEASE=1.9beta1 ./update-golang.sh
 
 Per-user Install
 ================
@@ -121,3 +125,5 @@ Example:
     
     $ mkdir ~/golang
     $ DESTINATION=~/golang PROFILED=~/.profile ./update-golang.sh
+
+END
