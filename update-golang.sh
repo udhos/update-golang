@@ -6,7 +6,7 @@
 #
 # PIPETHIS_AUTHOR udhos
 
-version=0.10
+version=0.9
 
 set -o pipefail
 
@@ -103,7 +103,7 @@ die() {
 solve() {
     local path=$1
     local p=
-    if echo "$path" | egrep -q ^/; then
+    if echo "$path" | grep -E -q ^/; then
 	p="$path"
 	local m=
 	m=$(file "$p")
@@ -123,7 +123,7 @@ abs_gotool=$abs_gobin/go
 abs_profiled=$(solve "$profiled")
 
 download() {
-    if echo "$url" | egrep -q '^https?:'; then
+    if echo "$url" | grep -E -q '^https?:'; then
 	msg "$url" is remote
 	if [ -f "$abs_filepath" ]; then
             msg no need to download - file cached: "$abs_filepath"
