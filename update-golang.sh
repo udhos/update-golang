@@ -28,7 +28,7 @@ log_stdin() {
 # defaults
 source=https://storage.googleapis.com/golang
 destination=/usr/local
-release=1.9
+release=1.9.1
 profiled=/etc/profile.d/golang_path.sh
 arch_probe="uname -m"
 
