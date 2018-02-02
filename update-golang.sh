@@ -316,8 +316,8 @@ show_version() {
 }
 
 check_package() {
-    if hash dpkg 2>/dev/null && dpkg -s golang-go | grep ^Status | grep -q installed; then
-	msg warning: golang-go is installed, you should remove it: apt remove golang-go
+    if hash dpkg 2>/dev/null && dpkg -s golang-go 2>/dev/null | grep ^Status | grep -q installed; then
+	msg warning: golang-go is installed, you should remove it: sudo apt remove golang-go
     fi
 }
 
