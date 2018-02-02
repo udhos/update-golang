@@ -10,6 +10,7 @@ before_install:
   - sudo apt remove golang-go
 
 script:
+  - export GOROOT=
   - echo GOROOT=$GOROOT
   - ./shellcheck.sh
   - sudo DEBUG=1 ./update-golang.sh
