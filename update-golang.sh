@@ -315,6 +315,12 @@ show_version() {
     msg version $version
 }
 
+check_package() {
+    if hash dpkg 2>/dev/null && dpkg -s golang-go | grep ^Status | grep -q installed; then
+	msg warning: golang-go is installed, you should remove it: apt remove golang-go
+    fi
+}
+
 # update pre-commit hook
 [ -d .git ] && [ ! -h .git/hooks/pre-commit ] && ln -s ../../pre-commit .git/hooks/pre-commit
 
@@ -343,8 +349,8 @@ case "$1" in
 esac
 
 show_version
-
 show_vars | log_stdin
+check_package
 
 msg will install golang "$label" as: "$abs_goroot"
 

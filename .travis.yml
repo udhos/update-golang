@@ -7,6 +7,7 @@ before_install:
   - echo "deb http://ftp.us.debian.org/debian unstable main contrib non-free" | sudo tee -a /etc/apt/sources.list
   - sudo apt update -qq
   - sudo apt install shellcheck -y
+  - sudo apt remove golang-go
 
 script:
   - ./shellcheck.sh
