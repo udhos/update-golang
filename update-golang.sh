@@ -52,6 +52,28 @@ case "$arch" in
 	;;
 esac
 
+show_version() {
+    msg version $version
+}
+
+show_version
+
+find_latest() {
+    local last=
+    local fetch=
+    if hash wget 2>/dev/null; then
+	fetch="wget -qO-"
+    else
+	fetch="curl --silent"
+    fi
+    last=$($fetch https://golang.org/doc/devel/release.html | grep -E -o 'go[0-9\.]+' | grep -E -o '[0-9]\.[0-9]+(\.[0-9]+)?' | sort | uniq | tail -1)
+    if echo "$last" | grep -q -E '[0-9]\.[0-9]+(\.[0-9]+)?'; then
+	msg find_latest: found last release: "$last"
+	release=$last
+    fi
+}
+find_latest
+
 [ -n "$SOURCE" ] && source=$SOURCE
 [ -n "$DESTINATION" ] && destination=$DESTINATION
 [ -n "$RELEASE" ] && release=$RELEASE
@@ -311,10 +333,6 @@ remove_old_install() {
     fi
 }
 
-show_version() {
-    msg version $version
-}
-
 check_package() {
     if hash dpkg 2>/dev/null && dpkg -s golang-go 2>/dev/null | grep ^Status | grep -q installed; then
 	msg warning: golang-go is installed, you should remove it: sudo apt remove golang-go
@@ -348,13 +366,12 @@ case "$1" in
 	;;
 esac
 
-show_version
 show_vars | log_stdin
 check_package
 
-msg will install golang "$label" as: "$abs_goroot"
-
 cd "$destination" || die could not enter destination="$destination"
+
+msg will install golang "$label" as: "$abs_goroot"
 
 download
 remove_old_link
