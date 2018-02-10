@@ -11,6 +11,7 @@ Table of Contents
   * [How it works](#how-it-works)
   * [Usage](#usage)
   * [Caution](#caution)
+  * [Remove](#remove)
   * [Example](#example)
   * [Customization](#customization)
   * [Per\-user Install](#per-user-install)
@@ -47,6 +48,13 @@ Before running the script, make sure you have an untampered copy by verifying th
     $ wget -qO hash.txt https://raw.githubusercontent.com/udhos/update-golang/master/update-golang.sh.sha256
     $ sha256sum -c hash.txt
     update-golang.sh: OK
+
+Remove
+======
+
+You can use the 'remove' option to undo update-golang.sh work:
+
+    $ sudo ./update-golang.sh remove
 
 Example
 =======
