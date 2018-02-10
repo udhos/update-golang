@@ -58,6 +58,11 @@ show_version() {
 
 show_version
 
+scan_versions() {
+    local fetch="$*"
+    $fetch https://golang.org/doc/devel/release.html | grep -E -o 'go[0-9\.]+' | grep -E -o '[0-9]\.[0-9]+(\.[0-9]+)?' | sort -V | uniq
+}
+
 find_latest() {
     local last=
     local fetch=
@@ -66,7 +71,7 @@ find_latest() {
     else
 	fetch="curl --silent"
     fi
-    last=$($fetch https://golang.org/doc/devel/release.html | grep -E -o 'go[0-9\.]+' | grep -E -o '[0-9]\.[0-9]+(\.[0-9]+)?' | sort | uniq | tail -1)
+    last=$(scan_versions $fetch | tail -1)
     if echo "$last" | grep -q -E '[0-9]\.[0-9]+(\.[0-9]+)?'; then
 	msg find_latest: found last release: "$last"
 	release=$last
