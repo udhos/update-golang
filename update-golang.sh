@@ -6,7 +6,7 @@
 #
 # PIPETHIS_AUTHOR udhos
 
-version=0.13
+version=0.14
 
 set -o pipefail
 
