@@ -71,7 +71,7 @@ find_latest() {
     else
 	fetch="curl --silent"
     fi
-    last=$(scan_versions $fetch | tail -1)
+    last=$(scan_versions "$fetch" | tail -1)
     if echo "$last" | grep -q -E '[0-9]\.[0-9]+(\.[0-9]+)?'; then
 	msg find_latest: found last release: "$last"
 	release=$last
@@ -112,9 +112,9 @@ goroot=$destination/go
 filepath=$cache/$filename
 new_install=$destination/$label
 
-tmp= ;# will be set
+tmp='' ;# will be set
 save_dir=$PWD
-previous_install= ;# will be set
+previous_install='' ;# will be set
 cleanup() {
     [ -n "$tmp" ] && [ -f "$tmp" ] && msg cleanup: $tmp && rm $tmp
     [ -n "$save_dir" ] && cd "$save_dir" || exit 2
