@@ -128,6 +128,8 @@ Default behavior is to install Golang globally for all system users.
 
 However you can use the environment variables to point locations to your per-user home directory.
 
+The per-user installation does not need root (sudo) privileges.
+
 Example:
 
     This example will install Golang under ~/golang for current user only.
