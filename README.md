@@ -31,6 +31,8 @@ This is the default behavior:
 
 4\. Only if needed, GOROOT is properly setup, also using '/etc/profile.d/golang_path.sh'.
 
+The script DOES NOT ever modify the GOPATH variable.
+
 You can customize the behavior by setting environment variables (see Customization below).
 
 Usage
