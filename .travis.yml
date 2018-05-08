@@ -2,11 +2,17 @@ language: bash
 
 sudo: required
 
+addons:
+  apt:
+    sources:
+    - debian-sid    # Grab shellcheck from the Debian repo (o_O)
+    packages:
+    - shellcheck
+
 before_install:
   - curl https://ftp-master.debian.org/keys/archive-key-7.0.asc | sudo apt-key add -
   - echo "deb http://ftp.us.debian.org/debian unstable main contrib non-free" | sudo tee -a /etc/apt/sources.list
   - sudo apt update -qq
-  - sudo apt install shellcheck -y
   - sudo apt remove golang-go
 
 script:
