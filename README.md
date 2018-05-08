@@ -61,12 +61,27 @@ You can use the 'remove' option to undo update-golang.sh work:
 Example
 =======
 
-    $ sudo ./update-golang.sh
-    update-golang.sh: version 0.12
+    lab@ubu1:~$ go
+    The program 'go' can be found in the following packages:
+     * golang-go
+     * gccgo-go
+    Try: sudo apt install <selected package>
+    lab@ubu1:~$
+    lab@ubu1:~$ git clone https://github.com/udhos/update-golang
+    Cloning into 'update-golang'...
+    remote: Counting objects: 468, done.
+    remote: Total 468 (delta 0), reused 0 (delta 0), pack-reused 468
+    Receiving objects: 100% (468/468), 63.60 KiB | 140.00 KiB/s, done.
+    Resolving deltas: 100% (244/244), done.
+    lab@ubu1:~$
+    lab@ubu1:~$ cd update-golang/
+    lab@ubu1:~/update-golang$ sudo ./update-golang.sh
+    update-golang.sh: version 0.15
+    update-golang.sh: find_latest: found last release: 1.10.2
     update-golang.sh: user: uid=0(root) gid=0(root) groups=0(root)
     update-golang.sh: SOURCE=https://storage.googleapis.com/golang
     update-golang.sh: DESTINATION=/usr/local
-    update-golang.sh: RELEASE=1.9.2
+    update-golang.sh: RELEASE=1.10.2
     update-golang.sh: OS=linux
     update-golang.sh: ARCH_PROBE=uname -m
     update-golang.sh: ARCH=amd64
@@ -74,33 +89,33 @@ Example
     update-golang.sh: CACHE=/usr/local
     update-golang.sh: GOPATH=
     update-golang.sh: DEBUG=
-    update-golang.sh: will install golang go1.9.2.linux-amd64 as: /usr/local/go
-    update-golang.sh: https://storage.googleapis.com/golang/go1.9.2.linux-amd64.tar.gz is remote
-    --2017-11-26 21:32:41--  https://storage.googleapis.com/golang/go1.9.2.linux-amd64.tar.gz
-    Resolving storage.googleapis.com (storage.googleapis.com)... 216.58.202.80
-    Connecting to storage.googleapis.com (storage.googleapis.com)|216.58.202.80|:443... connected.
+    update-golang.sh: will install golang go1.10.2.linux-amd64 as: /usr/local/go
+    update-golang.sh: https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz is remote
+    --2018-05-08 11:08:00--  https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz
+    Resolving storage.googleapis.com (storage.googleapis.com)... 172.217.162.176, 2800:3f0:4001:817::2010
+    Connecting to storage.googleapis.com (storage.googleapis.com)|172.217.162.176|:443... connected.
     HTTP request sent, awaiting response... 200 OK
-    Length: 104247844 (99M) [application/octet-stream]
-    Saving to: ‘/usr/local/go1.9.2.linux-amd64.tar.gz’
+    Length: 132481801 (126M) [application/octet-stream]
+    Saving to: ‘/usr/local/go1.10.2.linux-amd64.tar.gz’
 
-    /usr/local/go1.9.2.linux-amd64.tar.gz     100%[=====================================================================================>]  99.42M  11.3MB/s    in 8.8s
+    /usr/local/go1.10.2.linux-amd64.tar.gz    100%[=====================================================================================>] 126.34M  10.4MB/s    in 12s
 
-    2017-11-26 21:32:51 (11.3 MB/s) - ‘/usr/local/go1.9.2.linux-amd64.tar.gz’ saved [104247844/104247844]
+    2018-05-08 11:08:13 (10.6 MB/s) - ‘/usr/local/go1.10.2.linux-amd64.tar.gz’ saved [132481801/132481801]
 
     update-golang.sh: remove_old_link: not found symlink for old install
-    update-golang.sh: untar: tar -x -f /usr/local/go1.9.2.linux-amd64.tar.gz
+    update-golang.sh: untar: tar -x -f /usr/local/go1.10.2.linux-amd64.tar.gz
     update-golang.sh: path: removing old settings from: /etc/profile.d/golang_path.sh
     update-golang.sh: path: issuing new /usr/local/go/bin to /etc/profile.d/golang_path.sh
     update-golang.sh: path: issuing /home/lab/go/bin to /etc/profile.d/golang_path.sh
-    update-golang.sh: golang go1.9.2.linux-amd64 installed at: /usr/local/go
+    update-golang.sh: golang go1.10.2.linux-amd64 installed at: /usr/local/go
     update-golang.sh: testing: /usr/local/go/bin/go version
-    update-golang.sh: go version go1.9.2 linux/amd64
+    update-golang.sh: go version go1.10.2 linux/amd64
     update-golang.sh: /usr/local/go/bin/go version: SUCCESS
-    update-golang.sh: testing: /usr/local/go/bin/go run /tmp/hello-tmplBkHb1Ej.go
+    update-golang.sh: testing: /usr/local/go/bin/go run /tmp/hello-tmpkpkMTIlc.go
     update-golang.sh: hello, world
-    update-golang.sh: /usr/local/go/bin/go run /tmp/hello-tmplBkHb1Ej.go: SUCCESS
-    update-golang.sh: cleanup: /tmp/tmp.2pzVpWkExd
-    $
+    update-golang.sh: /usr/local/go/bin/go run /tmp/hello-tmpkpkMTIlc.go: SUCCESS
+    update-golang.sh: cleanup: /tmp/tmp.IReSzeOpfA
+    lab@ubu1:~/update-golang$
 
 Customization
 =============
