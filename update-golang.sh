@@ -26,6 +26,7 @@ log_stdin() {
 }
 
 # defaults
+release_list=https://golang.org/doc/devel/release.html
 source=https://storage.googleapis.com/golang
 destination=/usr/local
 release=1.10.1
@@ -60,10 +61,12 @@ show_version
 
 scan_versions() {
     local fetch="$*"
-    $fetch https://golang.org/doc/devel/release.html | grep -E -o 'go[0-9\.]+' | grep -E -o '[0-9]\.[0-9]+(\.[0-9]+)?' | sort -V | uniq
+    debug scan_versions: from "$release_list"
+    $fetch "$release_list" | grep -E -o 'go[0-9\.]+' | grep -E -o '[0-9]\.[0-9]+(\.[0-9]+)?' | sort -V | uniq
 }
 
 find_latest() {
+    debug find_latest: from "$release_list"
     local last=
     local fetch=
     if hash wget 2>/dev/null; then
@@ -77,11 +80,18 @@ find_latest() {
 	release=$last
     fi
 }
-find_latest
+
+[ -n "$RELEASE_LIST" ] && release_list=$RELEASE_LIST
+
+if [ -n "$RELEASE" ]; then
+	msg release forced to RELEASE="$RELEASE"
+	release="$RELEASE"
+else
+	find_latest
+fi
 
 [ -n "$SOURCE" ] && source=$SOURCE
 [ -n "$DESTINATION" ] && destination=$DESTINATION
-[ -n "$RELEASE" ] && release=$RELEASE
 [ -n "$OS" ] && os=$OS
 [ -n "$ARCH" ] && arch=$ARCH
 [ -n "$PROFILED" ] && profiled=$PROFILED
@@ -92,6 +102,7 @@ show_vars() {
     echo user: "$(id)"
     
     cat <<EOF
+RELEASE_LIST=$release_list
 SOURCE=$source
 DESTINATION=$destination
 RELEASE=$release
