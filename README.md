@@ -69,16 +69,18 @@ Example
     lab@ubu1:~$
     lab@ubu1:~$ git clone https://github.com/udhos/update-golang
     Cloning into 'update-golang'...
-    remote: Counting objects: 468, done.
-    remote: Total 468 (delta 0), reused 0 (delta 0), pack-reused 468
-    Receiving objects: 100% (468/468), 63.60 KiB | 140.00 KiB/s, done.
-    Resolving deltas: 100% (244/244), done.
+    remote: Counting objects: 481, done.
+    remote: Compressing objects: 100% (11/11), done.
+    remote: Total 481 (delta 4), reused 9 (delta 2), pack-reused 468
+    Receiving objects: 100% (481/481), 70.22 KiB | 125.00 KiB/s, done.
+    Resolving deltas: 100% (248/248), done.
     lab@ubu1:~$
-    lab@ubu1:~$ cd update-golang/
+    lab@ubu1:~$ cd update-golang
     lab@ubu1:~/update-golang$ sudo ./update-golang.sh
     update-golang.sh: version 0.15
     update-golang.sh: find_latest: found last release: 1.10.2
     update-golang.sh: user: uid=0(root) gid=0(root) groups=0(root)
+    update-golang.sh: RELEASE_LIST=https://golang.org/doc/devel/release.html
     update-golang.sh: SOURCE=https://storage.googleapis.com/golang
     update-golang.sh: DESTINATION=/usr/local
     update-golang.sh: RELEASE=1.10.2
@@ -91,17 +93,7 @@ Example
     update-golang.sh: DEBUG=
     update-golang.sh: will install golang go1.10.2.linux-amd64 as: /usr/local/go
     update-golang.sh: https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz is remote
-    --2018-05-08 11:08:00--  https://storage.googleapis.com/golang/go1.10.2.linux-amd64.tar.gz
-    Resolving storage.googleapis.com (storage.googleapis.com)... 172.217.162.176, 2800:3f0:4001:817::2010
-    Connecting to storage.googleapis.com (storage.googleapis.com)|172.217.162.176|:443... connected.
-    HTTP request sent, awaiting response... 200 OK
-    Length: 132481801 (126M) [application/octet-stream]
-    Saving to: ‘/usr/local/go1.10.2.linux-amd64.tar.gz’
-
-    /usr/local/go1.10.2.linux-amd64.tar.gz    100%[=====================================================================================>] 126.34M  10.4MB/s    in 12s
-
-    2018-05-08 11:08:13 (10.6 MB/s) - ‘/usr/local/go1.10.2.linux-amd64.tar.gz’ saved [132481801/132481801]
-
+    update-golang.sh: no need to download - file cached: /usr/local/go1.10.2.linux-amd64.tar.gz
     update-golang.sh: remove_old_link: not found symlink for old install
     update-golang.sh: untar: tar -x -f /usr/local/go1.10.2.linux-amd64.tar.gz
     update-golang.sh: path: removing old settings from: /etc/profile.d/golang_path.sh
@@ -111,10 +103,10 @@ Example
     update-golang.sh: testing: /usr/local/go/bin/go version
     update-golang.sh: go version go1.10.2 linux/amd64
     update-golang.sh: /usr/local/go/bin/go version: SUCCESS
-    update-golang.sh: testing: /usr/local/go/bin/go run /tmp/hello-tmpkpkMTIlc.go
+    update-golang.sh: testing: /usr/local/go/bin/go run /tmp/hello-tmpv1bX1rQN.go
     update-golang.sh: hello, world
-    update-golang.sh: /usr/local/go/bin/go run /tmp/hello-tmpkpkMTIlc.go: SUCCESS
-    update-golang.sh: cleanup: /tmp/tmp.IReSzeOpfA
+    update-golang.sh: /usr/local/go/bin/go run /tmp/hello-tmpv1bX1rQN.go: SUCCESS
+    update-golang.sh: cleanup: /tmp/tmp.tcNY25eXNl
     lab@ubu1:~/update-golang$
 
 Customization
