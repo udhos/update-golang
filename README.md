@@ -61,6 +61,8 @@ You can use the 'remove' option to undo update-golang.sh work:
 Example
 =======
 
+Sample session:
+
     lab@ubu1:~$ go
     The program 'go' can be found in the following packages:
      * golang-go
@@ -114,17 +116,17 @@ Customization
 
 These environment variables are available for customization:
 
-    SOURCE=https://storage.googleapis.com/golang ;# download location
-    DESTINATION=/usr/local                       ;# install destination
-    RELEASE=1.8.3                                ;# golang release
-    OS=linux                                     ;# os
-    ARCH_PROBE=uname -m                          ;# arch detection
-    ARCH=amd64                                   ;# arch
-    PROFILED=/etc/profile.d/golang_path.sh       ;# update PATH, optionally set GOROOT
-    CACHE=/usr/local                             ;# cache downloads
-    GOPATH=
-    DEBUG=
-
+    RELEASE_LIST=https://golang.org/doc/devel/release.html ;# search for new releases from this url
+    SOURCE=https://storage.googleapis.com/golang           ;# download source location
+    DESTINATION=/usr/local                                 ;# install destination
+    RELEASE=1.8.3                                          ;# force golang release
+    OS=linux                                               ;# force os
+    ARCH_PROBE='uname -m'                                  ;# force arch detection command
+    ARCH=amd64                                             ;# force arch
+    PROFILED=/etc/profile.d/golang_path.sh                 ;# update PATH, optionally set GOROOT
+    CACHE=/usr/local                                       ;# cache downloads in this dir
+    GOPATH=                                                ;# use this GOPATH
+    DEBUG=                                                 ;# set to enable debug
 
 Example:
 
