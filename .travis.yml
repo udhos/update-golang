@@ -2,9 +2,6 @@ language: bash
 
 sudo: required
 
-before_install:
-  - sudo apt remove golang-go
-
 script:
   - export GOROOT=
   - echo GOROOT=$GOROOT
