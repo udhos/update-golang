@@ -29,6 +29,11 @@ This is the default behavior:
 
 2\. The script uses local system OS and ARCH to download the correct binary release. It is not harmful to run the script multiple times. Downloaded releases are kept as cache under '/usr/local'. You can erase them manually.
 
+By default, the script only detects actual releases (not beta releases, not release candidates). However one can force any specific non-final release:
+
+    $ # force specific release candidate
+    $ sudo RELEASE=1.11rc1 ./update-golang.sh
+
 3\. The release is installed at '/usr/local/go'.
 
 4\. The path '/usr/local/go/bin' is added to PATH using '/etc/profile.d/golang_path.sh'.
