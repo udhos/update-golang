@@ -271,6 +271,31 @@ path() {
     fi
 }
 
+perm_build_cache() {
+	local gocache
+	gocache=$("$abs_gotool" env | grep GOCACHE)            ;# grab GOCACHE=path
+
+	local buildcache
+	buildcache=$(echo "$gocache" | awk -F= '{ print $2 }') ;# grab path
+	buildcache=$(eval echo "$buildcache")                  ;# unquote
+
+	local own
+	own=":"
+
+	if [ "$EUID" -eq 0 ]; then
+		# running as root - try user id from sudo
+		own="$SUDO_UID:$SUDO_GID"
+	fi
+
+	if [ "$own" == ":" ]; then
+		# try getting the usual user id
+		own=$(id -u):$(id -g)
+	fi
+
+	msg recursively forcing build cache ["$buildcache"] ownership to "$own"
+	chown -R "$own" "$buildcache"
+}
+
 test() {
     local ret=1
     local t="$abs_gotool version"
@@ -399,6 +424,7 @@ path
 msg golang "$label" installed at: "$abs_goroot"
 
 test
+perm_build_cache ;# must be after test, since testing might create root:root files
 cleanup
 
 exit 0
