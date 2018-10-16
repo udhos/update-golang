@@ -271,6 +271,10 @@ path() {
     fi
 }
 
+running_as_root() {
+	[ "$EUID" -eq 0 ]
+}
+
 perm_build_cache() {
 	local gocache
 	gocache=$("$abs_gotool" env | grep GOCACHE)            ;# grab GOCACHE=path
@@ -282,7 +286,7 @@ perm_build_cache() {
 	local own
 	own=":"
 
-	if [ "$EUID" -eq 0 ]; then
+	if running_as_root; then
 		# running as root - try user id from sudo
 		own="$SUDO_UID:$SUDO_GID"
 	fi
@@ -424,7 +428,12 @@ path
 msg golang "$label" installed at: "$abs_goroot"
 
 test
-perm_build_cache ;# must be after test, since testing might create root:root files
+if running_as_root; then
+	msg running_as_root: yes
+	perm_build_cache ;# must come after test, since testing might create root:root files
+else
+	msg running_as_root: no
+fi
 cleanup
 
 exit 0
