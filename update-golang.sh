@@ -65,11 +65,15 @@ scan_versions() {
     $fetch "$release_list" | grep -E -o 'go[0-9\.]+' | grep -E -o '[0-9]\.[0-9]+(\.[0-9]+)?' | sort -V | uniq
 }
 
+has_cmd() {
+	which "$1" >/dev/null
+}
+
 find_latest() {
     debug find_latest: from "$release_list"
     local last=
     local fetch=
-    if hash wget 2>/dev/null; then
+    if has_cmd wget; then
 	fetch="wget -qO-"
     else
 	fetch="curl --silent"
@@ -166,7 +170,7 @@ download() {
 	if [ -f "$abs_filepath" ]; then
             msg no need to download - file cached: "$abs_filepath"
 	else
-	    if hash wget 2>/dev/null; then
+	    if has_cmd wget; then
               wget -O "$abs_filepath" "$url" || die could not download using wget from: "$url"
 	      [ -f "$abs_filepath" ] || die missing file downloaded with wget: "$abs_filepath"
             else
@@ -379,7 +383,7 @@ remove_old_install() {
 }
 
 check_package() {
-    if hash dpkg 2>/dev/null && dpkg -s golang-go 2>/dev/null | grep ^Status | grep -q installed; then
+    if has_cmd dpkg && dpkg -s golang-go 2>/dev/null | grep ^Status | grep -q installed; then
 	msg warning: golang-go is installed, you should remove it: sudo apt remove golang-go
     fi
 }
