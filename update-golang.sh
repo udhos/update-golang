@@ -241,12 +241,12 @@ relink() {
 
 path_mark=update-golang.sh
 
-path_remove() {
+profile_path_remove() {
     if [ -f "$abs_profiled" ]; then
-        msg path: removing old settings from: "$abs_profiled"
+        msg profile_path_remove: removing old settings from: "$abs_profiled"
         tmp=$(mktemp -t) # save for later removal
         if [ ! -f "$tmp" ]; then
-            msg path: could not create temporary file: "$tmp"
+            msg profile_path_remove: could not create temporary file: "$tmp"
             return
         fi
         grep -v "$path_mark" "$abs_profiled" > "$tmp"
@@ -256,21 +256,21 @@ path_remove() {
 
 default_goroot=/usr/local/go
 
-path() {
-    path_remove
+profile_path_add() {
+    profile_path_remove
 
-    msg path: issuing new "$abs_gobin" to "$abs_profiled"
+    msg profile_path_add: issuing new "$abs_gobin" to "$abs_profiled"
     local dont_edit=";# DOT NOT EDIT: installed by $path_mark"
     echo "export PATH=\$PATH:$abs_gobin $dont_edit" >> "$abs_profiled"
 
     local user_gobin=
     [ -n "$GOPATH" ] && user_gobin=$(echo "$GOPATH" | awk -F: '{print $1}')/bin
     [ -z "$user_gobin" ] && user_gobin=$HOME/go/bin
-    msg path: issuing "$user_gobin" to "$abs_profiled"
+    msg profile_path_add: issuing "$user_gobin" to "$abs_profiled"
     echo "export PATH=\$PATH:$user_gobin $dont_edit" >> "$abs_profiled"
 
     if [ "$abs_goroot" != $default_goroot ]; then
-        msg path: setting up custom GOROOT="$abs_goroot" to "$abs_profiled"
+        msg profile_path_add: setting up custom GOROOT="$abs_goroot" to "$abs_profiled"
         echo "export GOROOT=$abs_goroot $dont_edit" >> "$abs_profiled"
     fi
 }
@@ -369,7 +369,7 @@ remove_golang() {
         msg remove: not found symlink for old install
     fi
 
-    path_remove
+    profile_path_remove
 }
 
 remove_old_install() {
@@ -427,7 +427,7 @@ remove_old_link
 untar
 relink
 remove_old_install
-path
+profile_path_add
 
 msg golang "$label" installed at: "$abs_goroot"
 
