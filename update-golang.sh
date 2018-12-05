@@ -66,7 +66,7 @@ scan_versions() {
 }
 
 has_cmd() {
-	which "$1" >/dev/null
+	command -v "$1" >/dev/null
 }
 
 find_latest() {
