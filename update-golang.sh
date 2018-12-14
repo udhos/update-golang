@@ -30,7 +30,7 @@ log_stdin() {
 release_list=https://golang.org/dl/
 source=https://storage.googleapis.com/golang
 destination=/usr/local
-release=1.11.2 ;# just the default. the script detects the latest available release.
+release=1.11.3 ;# just the default. the script detects the latest available release.
 profiled=/etc/profile.d/golang_path.sh
 arch_probe="uname -m"
 
