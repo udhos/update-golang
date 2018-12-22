@@ -60,10 +60,16 @@ show_version() {
 
 show_version
 
+# avoid trying 1.12beta because 1.12beta1 is valid while 1.12beta is not
+# if you want beta, force RELEASE=1.12beta1
+exclude_beta() {
+	grep -v -E 'go[0-9\.]+(beta|rc)'
+}
+
 scan_versions() {
     local fetch="$*"
     debug scan_versions: from "$release_list"
-    $fetch "$release_list" | grep -E -o 'go[0-9\.]+' | grep -E -o '[0-9]\.[0-9]+(\.[0-9]+)?' | sort -V | uniq
+    $fetch "$release_list" | exclude_beta | grep -E -o 'go[0-9\.]+' | grep -E -o '[0-9]\.[0-9]+(\.[0-9]+)?' | sort -V | uniq
 }
 
 has_cmd() {
