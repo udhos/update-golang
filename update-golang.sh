@@ -272,7 +272,7 @@ profile_path_add() {
 
     local user_gobin=
     [ -n "$GOPATH" ] && user_gobin=$(echo "$GOPATH" | awk -F: '{print $1}')/bin
-    [ -z "$user_gobin" ] && user_gobin=$HOME/go/bin
+    [ -z "$user_gobin" ] && user_gobin='$HOME/go/bin'
     msg profile_path_add: issuing "$user_gobin" to "$abs_profiled"
     echo "export PATH=\$PATH:$user_gobin $dont_edit" >> "$abs_profiled"
 
