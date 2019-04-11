@@ -111,8 +111,8 @@ cache=$destination
 case "$os" in
     darwin)
         # darwin does not support /etc/profile.d, change default to /etc/profile
-	profiled=/etc/profile
-	;;
+        profiled=/etc/profile
+        ;;
 esac
 
 [ -n "$PROFILED" ] && profiled=$PROFILED
