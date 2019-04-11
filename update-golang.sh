@@ -311,7 +311,7 @@ perm_build_cache() {
 	chown -R "$own" "$buildcache"
 }
 
-test() {
+test_runhello() {
     local ret=1
     local t="$abs_gotool version"
     if [ "$abs_goroot" != $default_goroot ]; then
@@ -329,9 +329,10 @@ test() {
         msg "$t" FAIL
     fi
 
-    local hello=
-    hello=$(mktemp -t hello-tmpXXXXXXXX.go)
-    cat >"$hello" <<__EOF__
+    local hello_tmp=
+    hello_tmp=$(mktemp -t hello-tmpXXXXXXXX)".go"
+
+    cat >"$hello_tmp" <<__EOF__
 package main
 
 import "fmt"
@@ -342,7 +343,7 @@ func main() {
 __EOF__
 
     local abs_hello=
-    abs_hello=$(solve "$hello")
+    abs_hello=$(solve "$hello_tmp")
     ret=1
     t="$abs_gotool run $abs_hello"
     if [ "$abs_goroot" != $default_goroot ]; then
@@ -360,7 +361,7 @@ __EOF__
         msg "$t" FAIL
     fi
 
-    rm "$hello"
+    rm "$hello_tmp"
 }
 
 remove_golang() {
@@ -438,7 +439,7 @@ profile_path_add
 
 msg golang "$label" installed at: "$abs_goroot"
 
-test
+test_runhello
 if running_as_root; then
 	msg running_as_root: yes
 	perm_build_cache ;# must come after test, since testing might create root:root files
