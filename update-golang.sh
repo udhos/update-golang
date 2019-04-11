@@ -105,9 +105,17 @@ fi
 [ -n "$DESTINATION" ] && destination=$DESTINATION
 [ -n "$OS" ] && os=$OS
 [ -n "$ARCH" ] && arch=$ARCH
-[ -n "$PROFILED" ] && profiled=$PROFILED
 cache=$destination
 [ -n "$CACHE" ] && cache=$CACHE
+
+case "$os" in
+    darwin)
+        # darwin does not support /etc/profile.d, change default to /etc/profile
+	profiled=/etc/profile
+	;;
+esac
+
+[ -n "$PROFILED" ] && profiled=$PROFILED
 
 show_vars() {
     echo user: "$(id)"
