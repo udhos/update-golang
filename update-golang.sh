@@ -31,10 +31,15 @@ release_list=https://golang.org/dl/
 source=https://storage.googleapis.com/golang
 destination=/usr/local
 release=1.11.3 ;# just the default. the script detects the latest available release.
-profiled=/etc/profile.d/golang_path.sh
 arch_probe="uname -m"
 
 os=$(uname -s | tr "[:upper:]" "[:lower:]")
+
+if [ -d /etc/profile.d ]; then
+    profiled=/etc/profile.d/golang_path.sh
+else
+    profiled=/etc/profile
+fi
 
 [ -n "$ARCH_PROBE" ] && arch_probe="$ARCH_PROBE"
 
@@ -107,14 +112,6 @@ fi
 [ -n "$ARCH" ] && arch=$ARCH
 cache=$destination
 [ -n "$CACHE" ] && cache=$CACHE
-
-case "$os" in
-    darwin)
-        # darwin does not support /etc/profile.d, change default to /etc/profile
-        profiled=/etc/profile
-        ;;
-esac
-
 [ -n "$PROFILED" ] && profiled=$PROFILED
 
 show_vars() {
