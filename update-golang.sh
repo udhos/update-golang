@@ -256,7 +256,7 @@ path_mark=update-golang.sh
 profile_path_remove() {
     if [ -f "$abs_profiled" ]; then
         msg profile_path_remove: removing old settings from: "$abs_profiled"
-        tmp=$(mktemp -t) # save for later removal
+        tmp=$(mktemp -t profile-tmpXXXXXXXX) # save for later removal
         if [ ! -f "$tmp" ]; then
             msg profile_path_remove: could not create temporary file: "$tmp"
             return
