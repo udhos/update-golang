@@ -6,6 +6,8 @@
 #
 # PIPETHIS_AUTHOR udhos
 
+# ignore runtime environment variables
+# shellcheck disable=SC2153
 version=0.20
 
 set -o pipefail
@@ -272,12 +274,13 @@ profile_path_add() {
     profile_path_remove
 
     msg profile_path_add: issuing new "$abs_gobin" to "$abs_profiled"
-    local dont_edit=";# DOT NOT EDIT: installed by $path_mark"
+    local dont_edit=";# DO NOT EDIT: installed by $path_mark"
     echo "export PATH=\$PATH:$abs_gobin $dont_edit" >> "$abs_profiled"
 
     local user_gobin=
     [ -n "$GOPATH" ] && user_gobin=$(echo "$GOPATH" | awk -F: '{print $1}')/bin
-    [ -z "$user_gobin" ] && user_gobin='$HOME/go/bin'
+    # shellcheck disable=SC2016
+    [ -z "$user_gobin" ] && user_gobin='$HOME/go/bin'         ;# we want $HOME literal
     msg profile_path_add: issuing "$user_gobin" to "$abs_profiled"
     echo "export PATH=\$PATH:$user_gobin $dont_edit" >> "$abs_profiled"
 
@@ -285,6 +288,7 @@ profile_path_add() {
         msg profile_path_add: setting up custom GOROOT="$abs_goroot" to "$abs_profiled"
         echo "export GOROOT=$abs_goroot $dont_edit" >> "$abs_profiled"
     fi
+    chmod 755 "$abs_profiled"
 }
 
 running_as_root() {
