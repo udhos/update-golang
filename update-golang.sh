@@ -403,7 +403,7 @@ check_package() {
     if has_cmd dpkg && dpkg -s golang-go 2>/dev/null | grep ^Status | grep -q installed; then
 	msg warning: golang-go is installed, you should remove it: sudo apt remove golang-go
     fi
-    if has_cmd rpm && rpm -q golang 2>/dev/null; then
+    if has_cmd rpm && rpm -q golang >/dev/null 2>/dev/null; then
 	msg warning: golang is installed, you should remove it: sudo yum remove golang
     fi
 }
