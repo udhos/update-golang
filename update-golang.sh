@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # update-golang is a script to easily fetch and install new Golang releases
 #
