@@ -8,7 +8,7 @@
 
 # ignore runtime environment variables
 # shellcheck disable=SC2153
-version=0.20
+version=0.21
 
 set -o pipefail
 
