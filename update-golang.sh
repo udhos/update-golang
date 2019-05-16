@@ -118,7 +118,7 @@ cache=$destination
 
 show_vars() {
     echo user: "$(id)"
-    
+
     cat <<EOF
 RELEASE_LIST=$release_list
 SOURCE=$source
@@ -263,7 +263,7 @@ profile_path_remove() {
             msg profile_path_remove: could not create temporary file: "$tmp"
             return
         fi
-        grep -v "$path_mark" "$abs_profiled" > "$tmp"
+        sed "/# DO NOT EDIT: installed by $path_mark/,/# $path_mark: end/d" "$abs_profiled" > "$tmp"
         cp "$tmp" "$abs_profiled"
     fi
 }
@@ -272,22 +272,31 @@ default_goroot=/usr/local/go
 
 profile_path_add() {
     profile_path_remove
+    { echo "# DO NOT EDIT: installed by $path_mark"; echo ""; }  >> "$abs_profiled"
 
     msg profile_path_add: issuing new "$abs_gobin" to "$abs_profiled"
-    local dont_edit=";# DO NOT EDIT: installed by $path_mark"
-    echo "export PATH=\$PATH:$abs_gobin $dont_edit" >> "$abs_profiled"
+    { echo 'if ! echo "$PATH" | grep -Eq "(^|:)'"$abs_gobin"'($|:)"';
+    echo "then";
+    echo "    export PATH=\$PATH:$abs_gobin";
+    echo "fi"; } >> "$abs_profiled"
 
     local user_gobin=
     [ -n "$GOPATH" ] && user_gobin=$(echo "$GOPATH" | awk -F: '{print $1}')/bin
     # shellcheck disable=SC2016
     [ -z "$user_gobin" ] && user_gobin='$HOME/go/bin'         ;# we want $HOME literal
+
     msg profile_path_add: issuing "$user_gobin" to "$abs_profiled"
-    echo "export PATH=\$PATH:$user_gobin $dont_edit" >> "$abs_profiled"
+    { echo 'if ! echo "$PATH" | grep -Eq "(^|:)'"$user_gobin"'($|:)"';
+    echo "then";
+    echo "    export PATH=\$PATH:$user_gobin";
+    echo "fi"; } >> "$abs_profiled"
 
     if [ "$abs_goroot" != $default_goroot ]; then
         msg profile_path_add: setting up custom GOROOT="$abs_goroot" to "$abs_profiled"
-        echo "export GOROOT=$abs_goroot $dont_edit" >> "$abs_profiled"
+        echo "export GOROOT=$abs_goroot" >> "$abs_profiled"
     fi
+    echo "# $path_mark: end" >> "$abs_profiled"
+
     chmod 755 "$abs_profiled"
 }
 
