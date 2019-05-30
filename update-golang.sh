@@ -48,17 +48,20 @@ fi
 arch=$($arch_probe)
 case "$arch" in
     i*)
-	arch=386
-	;;
+        arch=386
+        ;;
     x*)
         arch=amd64
-	;;
+        ;;
     aarch64)
-        arch=armv6l
-	;;
+        #arch=armv6l
+        arch=arm64
+        ;;
     armv7l)
+        # Go project does not provide a binary release for armv71
+        msg armv7l is not supported, using armv6l
         arch=armv6l
-	;;
+        ;;
 esac
 
 show_version() {
