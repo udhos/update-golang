@@ -32,7 +32,7 @@ log_stdin() {
 release_list=https://golang.org/dl/
 source=https://storage.googleapis.com/golang
 destination=/usr/local
-release=1.12.5 ;# just the default. the script detects the latest available release.
+release=1.12.7 ;# just the default. the script detects the latest available release.
 arch_probe="uname -m"
 
 os=$(uname -s | tr "[:upper:]" "[:lower:]")
@@ -86,14 +86,31 @@ has_cmd() {
 	command -v "$1" >/dev/null
 }
 
+tmp='' ;# will be set
+save_dir=$PWD
+previous_install='' ;# will be set
+cleanup() {
+    [ -n "$tmp" ] && [ -f "$tmp" ] && msg cleanup: $tmp && rm $tmp
+    [ -n "$save_dir" ] && cd "$save_dir" || exit 2
+    [ -n "$previous_install" ] && msg remember to delete previous install saved as: "$previous_install"
+}
+
+die() {
+    msg "die: $*"
+    cleanup
+    exit 3
+}
+
 find_latest() {
     debug find_latest: from "$release_list"
     local last=
     local fetch=
     if has_cmd wget; then
 	fetch="wget -qO-"
-    else
+    elif has_cmd curl; then
 	fetch="curl --silent"
+    else
+	die "find_latest: missing both 'wget' and 'curl'"
     fi
     last=$(scan_versions "$fetch" | tail -1)
     if echo "$last" | grep -q -E '[0-9]\.[0-9]+(\.[0-9]+)?'; then
@@ -144,21 +161,6 @@ goroot=$destination/go
 filepath=$cache/$filename
 new_install=$destination/$label
 
-tmp='' ;# will be set
-save_dir=$PWD
-previous_install='' ;# will be set
-cleanup() {
-    [ -n "$tmp" ] && [ -f "$tmp" ] && msg cleanup: $tmp && rm $tmp
-    [ -n "$save_dir" ] && cd "$save_dir" || exit 2
-    [ -n "$previous_install" ] && msg remember to delete previous install saved as: "$previous_install"
-}
-
-die() {
-    msg "die: $*"
-    cleanup
-    exit 3
-}
-
 solve() {
     local path=$1
     local p=
@@ -190,9 +192,11 @@ download() {
 	    if has_cmd wget; then
               wget -O "$abs_filepath" "$url" || die could not download using wget from: "$url"
 	      [ -f "$abs_filepath" ] || die missing file downloaded with wget: "$abs_filepath"
-            else
+            elif has_cmd curl; then
               curl -o "$abs_filepath" "$url" || die could not download using curl from: "$url"
 	      [ -f "$abs_filepath" ] || die missing file downloaded with curl: "$abs_filepath"
+            else
+              die "download: missing both 'wget' and 'curl'"
             fi
 	fi
     else
