@@ -32,7 +32,7 @@ log_stdin() {
 release_list=https://golang.org/dl/
 source=https://storage.googleapis.com/golang
 destination=/usr/local
-release=1.13 ;# just the default. the script detects the latest available release.
+release=1.13.7 ;# just the default. the script detects the latest available release.
 arch_probe="uname -m"
 
 os=$(uname -s | tr "[:upper:]" "[:lower:]")
@@ -79,11 +79,18 @@ exclude_beta() {
 scan_versions() {
     local fetch="$*"
     debug scan_versions: from "$release_list"
-    $fetch "$release_list" | exclude_beta | grep -E -o 'go[0-9\.]+' | grep -E -o '[0-9]\.[0-9]+(\.[0-9]+)?' | sort -V | uniq
+    if has_cmd jq; then
+        local rl="$release_list?mode=json"
+        msg "parsing with jq from $rl"
+        $fetch "$rl" | jq -r '.[].files[].version' | sort | uniq | exclude_beta | sed -e 's/go//' | sort -V
+    else
+        $fetch "$release_list" | exclude_beta | grep -E -o 'go[0-9\.]+' | grep -E -o '[0-9]\.[0-9]+(\.[0-9]+)?' | sort -V | uniq
+    fi
 }
 
 has_cmd() {
-	command -v "$1" >/dev/null
+	#command -v "$1" >/dev/null
+	hash "$1" 2>/dev/null
 }
 
 tmp='' ;# will be set
@@ -102,6 +109,7 @@ die() {
 }
 
 find_latest() {
+    debug find_latest: built-in version: "$release"
     debug find_latest: from "$release_list"
     local last=
     local fetch=
