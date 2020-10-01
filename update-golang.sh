@@ -341,16 +341,32 @@ perm_build_cache() {
 	chown -R "$own" "$buildcache"
 }
 
+unsudo() {
+	if running_as_root; then
+		# shellcheck disable=SC2068
+		msg unsudo: running_as_root:"$SUDO_USER": $@
+		# shellcheck disable=SC2068
+		sudo -i -u "$SUDO_USER" $@
+	else
+		# shellcheck disable=SC2068
+		msg unsudo: non_root: $@
+		# shellcheck disable=SC2068
+		$@
+	fi
+}
+
 test_runhello() {
     local ret=1
     local t="$abs_gotool version"
     if [ "$abs_goroot" != $default_goroot ]; then
         msg testing: GOROOT="$abs_goroot" "$t"
-        GOROOT=$abs_goroot $t | log_stdin
+	# shellcheck disable=SC2086
+        GOROOT=$abs_goroot unsudo $t | log_stdin
         ret=$?
     else
         msg testing: "$t"
-        $t | log_stdin
+	# shellcheck disable=SC2086
+        unsudo $t | log_stdin
         ret=$?
     fi
     if [ $ret -eq 0 ]; then
@@ -360,13 +376,11 @@ test_runhello() {
     fi
 
     local hello_tmp=
-    hello_tmp=$(mktemp -t hello-tmpXXXXXXXX)".go"
+    hello_tmp=$(unsudo mktemp -t hello-tmpXXXXXXXX)".go"
 
-    cat >"$hello_tmp" <<__EOF__
+    unsudo tee "$hello_tmp" >/dev/null <<__EOF__
 package main
-
 import "fmt"
-
 func main() {
 	fmt.Printf("hello, world\n")
 }
@@ -378,11 +392,13 @@ __EOF__
     t="$abs_gotool run $abs_hello"
     if [ "$abs_goroot" != $default_goroot ]; then
         msg testing: GOROOT="$abs_goroot" "$t"
-        GOROOT=$abs_goroot $t | log_stdin
+	# shellcheck disable=SC2086
+        GOROOT=$abs_goroot unsudo $t | log_stdin
         ret=$?
     else
         msg testing: "$t"
-        $t | log_stdin
+	# shellcheck disable=SC2086
+        unsudo $t | log_stdin
         ret=$?
     fi
     if [ $ret -eq 0 ]; then
