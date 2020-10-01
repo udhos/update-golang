@@ -320,18 +320,15 @@ running_as_root() {
 }
 
 perm_build_cache() {
-	local gocache
-	gocache=$("$abs_gotool" env | grep GOCACHE)            ;# grab GOCACHE=path
-
 	local buildcache
-	buildcache=$(echo "$gocache" | awk -F= '{ print $2 }') ;# grab path
-	buildcache=$(eval echo "$buildcache")                  ;# unquote
+	buildcache=$($abs_gotool env GOCACHE)
 
 	local own
 	own=":"
 
 	if running_as_root; then
 		# running as root - try user id from sudo
+		buildcache=$(sudo -i -u "$SUDO_USER" "$abs_gotool" env GOCACHE)
 		own="$SUDO_UID:$SUDO_GID"
 	fi
 
