@@ -360,12 +360,12 @@ test_runhello() {
     local t="$abs_gotool version"
     if [ "$abs_goroot" != $default_goroot ]; then
         msg testing: GOROOT="$abs_goroot" "$t"
-	# shellcheck disable=SC2086
+        # shellcheck disable=SC2086
         GOROOT=$abs_goroot unsudo $t | log_stdin
         ret=$?
     else
         msg testing: "$t"
-	# shellcheck disable=SC2086
+        # shellcheck disable=SC2086
         unsudo $t | log_stdin
         ret=$?
     fi
@@ -392,12 +392,12 @@ __EOF__
     t="$abs_gotool run $abs_hello"
     if [ "$abs_goroot" != $default_goroot ]; then
         msg testing: GOROOT="$abs_goroot" "$t"
-	# shellcheck disable=SC2086
+        # shellcheck disable=SC2086
         GOROOT=$abs_goroot unsudo $t | log_stdin
         ret=$?
     else
         msg testing: "$t"
-	# shellcheck disable=SC2086
+        # shellcheck disable=SC2086
         unsudo $t | log_stdin
         ret=$?
     fi
