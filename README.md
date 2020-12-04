@@ -66,6 +66,13 @@ You can use the 'remove' option to undo update-golang.sh work:
 
     $ sudo ./update-golang.sh remove
 
+Declutter
+======
+
+You can use the '-declutter' option to prevent caching downloaded archives:
+
+    $ sudo ./update-golang.sh -declutter
+
 Example
 =======
 

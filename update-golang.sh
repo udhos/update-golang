@@ -96,10 +96,11 @@ has_cmd() {
 tmp='' ;# will be set
 save_dir=$PWD
 previous_install='' ;# will be set
+declutter='' ;# will be set
 tar_to_remove='' ;# will be set
 cleanup() {
     [ -n "$tmp" ] && [ -f "$tmp" ] && msg cleanup: $tmp && rm $tmp
-    [ -n "$tar_to_remove" ] && [ -f "$tar_to_remove" ] && msg cleanup: $tar_to_remove && rm $tar_to_remove
+    [ -n "$declutter" ] && [ -n "$tar_to_remove" ] && [ -f "$tar_to_remove" ] && msg cleanup: $tar_to_remove && rm $tar_to_remove
     [ -n "$save_dir" ] && cd "$save_dir" || exit 2
     [ -n "$previous_install" ] && msg remember to delete previous install saved as: "$previous_install"
 }
@@ -161,6 +162,7 @@ PROFILED=$profiled
 CACHE=$cache
 GOPATH=$GOPATH
 DEBUG=$DEBUG
+
 EOF
 }
 
@@ -466,11 +468,14 @@ case "$1" in
 	remove_golang
 	exit 0
 	;;
+    -declutter)
+	declutter="true"
+	;;
     '')
 	;;
     *)
 	msg unknown option: "$1"
-	echo >&2 usage: "$me [-v] [remove]"
+	echo >&2 usage: "$me [-v] [remove] [-declutter]"
 	exit 1
 	;;
 esac
