@@ -32,7 +32,7 @@ log_stdin() {
 release_list=https://golang.org/dl/
 source=https://storage.googleapis.com/golang
 destination=/usr/local
-release=1.15.2 ;# just the default. the script detects the latest available release.
+release=1.16 ;# just the default. the script detects the latest available release.
 arch_probe="uname -m"
 
 os=$(uname -s | tr "[:upper:]" "[:lower:]")
