@@ -385,9 +385,12 @@ test_runhello() {
 
     unsudo tee "$hello_tmp" >/dev/null <<__EOF__
 package main
-import "fmt"
+import (
+    "fmt"
+    "runtime"
+)
 func main() {
-	fmt.Printf("hello, world\n")
+	fmt.Printf("hello, world - %s\n", runtime.Version())
 }
 __EOF__
 
