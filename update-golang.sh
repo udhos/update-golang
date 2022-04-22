@@ -32,7 +32,7 @@ log_stdin() {
 release_list=https://go.dev/dl/
 source=https://storage.googleapis.com/golang
 destination=/usr/local
-release=1.17.8 ;# just the default. the script detects the latest available release.
+release=1.18.1 ;# just the default. the script detects the latest available release.
 arch_probe="uname -m"
 
 os=$(uname -s | tr "[:upper:]" "[:lower:]")
@@ -99,8 +99,8 @@ previous_install='' ;# will be set
 declutter='' ;# will be set
 tar_to_remove='' ;# will be set
 cleanup() {
-    [ -n "$tmp" ] && [ -f "$tmp" ] && msg cleanup: $tmp && rm $tmp
-    [ -n "$declutter" ] && [ -n "$tar_to_remove" ] && [ -f "$tar_to_remove" ] && msg cleanup: $tar_to_remove && rm $tar_to_remove
+    [ -n "$tmp" ] && [ -f "$tmp" ] && msg cleanup: "$tmp" && rm "$tmp"
+    [ -n "$declutter" ] && [ -n "$tar_to_remove" ] && [ -f "$tar_to_remove" ] && msg cleanup: "$tar_to_remove" && rm "$tar_to_remove"
     [ -n "$save_dir" ] && cd "$save_dir" || exit 2
     [ -n "$previous_install" ] && msg remember to delete previous install saved as: "$previous_install"
 }
