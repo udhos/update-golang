@@ -23,7 +23,7 @@ debug() {
 
 log_stdin() {
     while read -r i; do
-	msg "$i"
+        msg "$i"
     done
 }
 
@@ -73,7 +73,7 @@ show_version
 # avoid trying 1.12beta because 1.12beta1 is valid while 1.12beta is not
 # if you want beta, force RELEASE=1.12beta1
 exclude_beta() {
-	grep -v -E 'go[0-9\.]+(beta|rc)'
+    grep -v -E 'go[0-9\.]+(beta|rc)'
 }
 
 scan_versions() {
@@ -89,8 +89,8 @@ scan_versions() {
 }
 
 has_cmd() {
-	#command -v "$1" >/dev/null
-	hash "$1" 2>/dev/null
+    #command -v "$1" >/dev/null
+    hash "$1" 2>/dev/null
 }
 
 tmp='' ;# will be set
@@ -117,26 +117,26 @@ find_latest() {
     local last=
     local fetch=
     if has_cmd wget; then
-	fetch="wget -qO-"
+        fetch="wget -qO-"
     elif has_cmd curl; then
-	fetch="curl --silent"
+        fetch="curl --silent"
     else
-	die "find_latest: missing both 'wget' and 'curl'"
+        die "find_latest: missing both 'wget' and 'curl'"
     fi
     last=$(scan_versions "$fetch" | tail -1)
     if echo "$last" | grep -q -E '[0-9]\.[0-9]+(\.[0-9]+)?'; then
-	msg find_latest: found last release: "$last"
-	release=$last
+        msg find_latest: found last release: "$last"
+        release=$last
     fi
 }
 
 [ -n "$RELEASE_LIST" ] && release_list=$RELEASE_LIST
 
 if [ -n "$RELEASE" ]; then
-	msg release forced to RELEASE="$RELEASE"
-	release="$RELEASE"
+    msg release forced to RELEASE="$RELEASE"
+    release="$RELEASE"
 else
-	find_latest
+    find_latest
 fi
 
 [ -n "$SOURCE" ] && source=$SOURCE
@@ -177,12 +177,12 @@ solve() {
     local path=$1
     local p=
     if echo "$path" | grep -E -q ^/; then
-	p="$path"
-	local m=
-	m=$(file "$p")
+        p="$path"
+        local m=
+        m=$(file "$p")
         debug "solve: $p: $m"
     else
-	p="$save_dir/$path"
+        p="$save_dir/$path"
     fi
     echo "$p"
 }
@@ -197,23 +197,23 @@ abs_profiled=$(solve "$profiled")
 
 download() {
     if echo "$url" | grep -E -q '^https?:'; then
-	msg "$url" is remote
-	if [ -f "$abs_filepath" ]; then
+        msg "$url" is remote
+        if [ -f "$abs_filepath" ]; then
             msg no need to download - file cached: "$abs_filepath"
-	else
-	    if has_cmd wget; then
-              wget -O "$abs_filepath" "$url" || die could not download using wget from: "$url"
-	      [ -f "$abs_filepath" ] || die missing file downloaded with wget: "$abs_filepath"
+        else
+            if has_cmd wget; then
+                wget -O "$abs_filepath" "$url" || die could not download using wget from: "$url"
+                [ -f "$abs_filepath" ] || die missing file downloaded with wget: "$abs_filepath"
             elif has_cmd curl; then
-              curl -o "$abs_filepath" "$url" || die could not download using curl from: "$url"
-	      [ -f "$abs_filepath" ] || die missing file downloaded with curl: "$abs_filepath"
+                curl -o "$abs_filepath" "$url" || die could not download using curl from: "$url"
+                [ -f "$abs_filepath" ] || die missing file downloaded with curl: "$abs_filepath"
             else
-              die "download: missing both 'wget' and 'curl'"
+                die "download: missing both 'wget' and 'curl'"
             fi
-	fi
+        fi
     else
-	msg "$abs_url" is local
-	cp "$abs_url" . || die could not copy from: "$abs_url"
+        msg "$abs_url" is local
+        cp "$abs_url" . || die could not copy from: "$abs_url"
     fi
 }
 
@@ -236,16 +236,16 @@ remove_old_link() {
     if symlink_test "$abs_goroot"; then
         abs_old_install=$(symlink_get "$abs_goroot")
         msg remove_old_link: found symlink for old install: "$abs_old_install"
-    	[ -r "$abs_goroot" ] && rm "$abs_goroot"
+        [ -r "$abs_goroot" ] && rm "$abs_goroot"
     else
         msg remove_old_link: not found symlink for old install
-    	if [ -r "$abs_goroot" ]; then
-		local now
-		now=$(date +%Y%m%d-%H%M%S)
-		mv "$abs_goroot" "$abs_goroot-$now" || die could not rename existing goland directory: "$abs_goroot"
-		previous_install="$abs_goroot-$now"
-		msg previous install renamed to: "$previous_install"
-	fi
+        if [ -r "$abs_goroot" ]; then
+            local now
+            now=$(date +%Y%m%d-%H%M%S)
+            mv "$abs_goroot" "$abs_goroot-$now" || die could not rename existing goland directory: "$abs_goroot"
+            previous_install="$abs_goroot-$now"
+            msg previous install renamed to: "$previous_install"
+        fi
     fi
     [ -r "$abs_goroot" ] && die could not remove existing golang directory: "$abs_goroot"
 }
@@ -321,43 +321,43 @@ profile_path_add() {
 }
 
 running_as_root() {
-	[ "$EUID" -eq 0 ]
+    [ "$EUID" -eq 0 ]
 }
 
 perm_build_cache() {
-	local buildcache
-	buildcache=$($abs_gotool env GOCACHE)
+    local buildcache
+    buildcache=$($abs_gotool env GOCACHE)
 
-	local own
-	own=":"
+    local own
+    own=":"
 
-	if running_as_root; then
-		# running as root - try user id from sudo
-		buildcache=$(sudo -i -u "$SUDO_USER" "$abs_gotool" env GOCACHE)
-		own="$SUDO_UID:$SUDO_GID"
-	fi
+    if running_as_root; then
+        # running as root - try user id from sudo
+        buildcache=$(sudo -i -u "$SUDO_USER" "$abs_gotool" env GOCACHE)
+        own="$SUDO_UID:$SUDO_GID"
+    fi
 
-	if [ "$own" == ":" ]; then
-		# try getting the usual user id
-		own=$(id -u):$(id -g)
-	fi
+    if [ "$own" == ":" ]; then
+        # try getting the usual user id
+        own=$(id -u):$(id -g)
+    fi
 
-	msg recursively forcing build cache ["$buildcache"] ownership to "$own"
-	chown -R "$own" "$buildcache"
+    msg recursively forcing build cache ["$buildcache"] ownership to "$own"
+    chown -R "$own" "$buildcache"
 }
 
 unsudo() {
-	if running_as_root; then
-		# shellcheck disable=SC2068
-		msg unsudo: running_as_root:"$SUDO_USER": $@
-		# shellcheck disable=SC2068
-		sudo -i -u "$SUDO_USER" $@
-	else
-		# shellcheck disable=SC2068
-		msg unsudo: non_root: $@
-		# shellcheck disable=SC2068
-		$@
-	fi
+    if running_as_root; then
+        # shellcheck disable=SC2068
+        msg unsudo: running_as_root:"$SUDO_USER": $@
+        # shellcheck disable=SC2068
+        sudo -i -u "$SUDO_USER" $@
+    else
+        # shellcheck disable=SC2068
+        msg unsudo: non_root: $@
+        # shellcheck disable=SC2068
+        $@
+    fi
 }
 
 test_runhello() {
@@ -390,7 +390,7 @@ import (
     "runtime"
 )
 func main() {
-	fmt.Printf("hello, world - %s\n", runtime.Version())
+    fmt.Printf("hello, world - %s\n", runtime.Version())
 }
 __EOF__
 
@@ -436,20 +436,20 @@ remove_golang() {
 
 remove_old_install() {
     if [ -n "$abs_old_install" ]; then
-	if [ "$abs_old_install" != "$abs_new_install" ]; then
+        if [ "$abs_old_install" != "$abs_new_install" ]; then
             # remove old install only if it actually changed
             msg removing old install: "$abs_old_install"
             rm_dir "$abs_old_install"
-	fi
+        fi
     fi
 }
 
 check_package() {
     if has_cmd dpkg && dpkg -s golang-go 2>/dev/null | grep ^Status | grep -q installed; then
-	msg warning: golang-go is installed, you should remove it: sudo apt remove golang-go
+        msg warning: golang-go is installed, you should remove it: sudo apt remove golang-go
     fi
     if has_cmd rpm && rpm -q golang >/dev/null 2>/dev/null; then
-	msg warning: golang is installed, you should remove it: sudo yum remove golang
+        msg warning: golang is installed, you should remove it: sudo yum remove golang
     fi
 }
 
@@ -464,23 +464,23 @@ check_package() {
 
 case "$1" in
     -v)
-	show_version
-	exit 0
-	;;
+        show_version
+        exit 0
+        ;;
     remove)
-	remove_golang
-	exit 0
-	;;
+        remove_golang
+        exit 0
+        ;;
     -declutter)
-	declutter="true"
-	;;
+        declutter="true"
+        ;;
     '')
-	;;
+        ;;
     *)
-	msg unknown option: "$1"
-	echo >&2 usage: "$me [-v] [remove] [-declutter]"
-	exit 1
-	;;
+        msg unknown option: "$1"
+        echo >&2 usage: "$me [-v] [remove] [-declutter]"
+        exit 1
+        ;;
 esac
 
 show_vars | log_stdin
@@ -501,10 +501,10 @@ msg golang "$label" installed at: "$abs_goroot"
 
 test_runhello
 if running_as_root; then
-	msg running_as_root: yes
-	perm_build_cache ;# must come after test, since testing might create root:root files
+    msg running_as_root: yes
+    perm_build_cache ;# must come after test, since testing might create root:root files
 else
-	msg running_as_root: no
+    msg running_as_root: no
 fi
 cleanup
 
