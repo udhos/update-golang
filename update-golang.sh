@@ -508,6 +508,14 @@ else
 fi
 cleanup
 
+msg
+msg "HINT: If this is the first time you run this script, the env vars"
+msg "      updated in the profile will only take effect for new shells."
+msg "      If you want them to affect the current shell, use this:"
+msg
+msg "      source $abs_profiled"
+msg
+
 exit 0
 
 #
