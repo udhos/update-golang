@@ -446,10 +446,25 @@ remove_old_install() {
 
 check_package() {
     if has_cmd dpkg && dpkg -s golang-go 2>/dev/null | grep ^Status | grep -q installed; then
-        msg warning: golang-go is installed, you should remove it: sudo apt remove golang-go
+        msg
+        msg WARNING
+        msg WARNING: golang-go is installed, you should remove it: sudo apt remove golang-go
+        msg WARNING
+        msg
     fi
     if has_cmd rpm && rpm -q golang >/dev/null 2>/dev/null; then
-        msg warning: golang is installed, you should remove it: sudo yum remove golang
+        msg
+        msg WARNING
+        msg WARNING: golang is installed, you should remove it: sudo yum remove golang
+        msg WARNING
+        msg
+    fi
+    if unsudo hash brew 2>/dev/null && unsudo brew ls --versions golang >/dev/null; then
+        msg
+        msg WARNING
+        msg WARNING: golang is installed, you should remove it: brew remove golang
+        msg WARNING
+        msg
     fi
 }
 
