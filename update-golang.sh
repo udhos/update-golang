@@ -297,7 +297,7 @@ profile_path_add() {
     msg profile_path_add: issuing new "$abs_gobin" to "$abs_profiled"
     { echo 'if ! echo "$PATH" | grep -Eq "(^|:)'"$abs_gobin"'($|:)"';
     echo "then";
-    echo "    export PATH=\$PATH:$abs_gobin";
+    echo "    export PATH=$abs_gobin:\$PATH";
     echo "fi"; } >> "$abs_profiled"
 
     local user_gobin=
