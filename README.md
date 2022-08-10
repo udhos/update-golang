@@ -156,11 +156,17 @@ However you can use the environment variables to point locations to your per-use
 
 The per-user installation does not need root (sudo) privileges.
 
-Example:
+Example installing:
 
     This example will install Golang under ~/golang for current user only.
     
     $ mkdir ~/golang
     $ DESTINATION=~/golang PROFILED=~/.bash_profile ./update-golang.sh
+
+Example uninstalling:
+
+    To uninstall, make sure to provide the same env vars used for installing:
+
+    $ DESTINATION=~/golang PROFILED=~/.bash_profile ./update-golang.sh remove
 
 END
