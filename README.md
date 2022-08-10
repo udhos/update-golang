@@ -161,6 +161,6 @@ Example:
     This example will install Golang under ~/golang for current user only.
     
     $ mkdir ~/golang
-    $ DESTINATION=~/golang PROFILED=~/.profile ./update-golang.sh
+    $ DESTINATION=~/golang PROFILED=~/.bash_profile ./update-golang.sh
 
 END
