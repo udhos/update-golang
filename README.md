@@ -20,11 +20,11 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc.go)
 How it works
 ============
 
-The script is based on official installation instructions from https://golang.org/doc/install.
+The script is based on official installation instructions from https://go.dev/doc/install.
 
 This is the default behavior:
 
-1\. Search for the latest binary release in https://golang.org/doc/devel/release.html.
+1\. Search for the latest binary release in https://go.dev/dl/.
 
 2\. The script uses local system OS and ARCH to download the correct binary release. It is not harmful to run the script multiple times. Downloaded releases are kept as cache under '/usr/local'. You can erase them manually.
 
