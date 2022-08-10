@@ -8,7 +8,7 @@
 
 # ignore runtime environment variables
 # shellcheck disable=SC2153
-version=0.25
+version=0.26
 
 set -o pipefail
 
@@ -35,6 +35,7 @@ source=https://storage.googleapis.com/golang
 destination=/usr/local
 release=1.19 ;# just the default. the script detects the latest available release.
 arch_probe="uname -m"
+connect_timeout=5
 
 os=$(uname -s | tr "[:upper:]" "[:lower:]")
 
@@ -82,7 +83,8 @@ scan_versions() {
     debug scan_versions: from "$release_list"
     if has_cmd jq; then
         local rl="$release_list?mode=json"
-        msg "parsing with jq from $rl"
+        msg "scan_versions: fetch: $fetch $rl"
+        msg "scan_versions: parsing with jq from $rl"
         $fetch "$rl" | jq -r '.[].files[].version' | sort | uniq | exclude_beta | sed -e 's/go//' | sort -V
     else
         $fetch "$release_list" | exclude_beta | grep -E -o 'go[0-9\.]+' | grep -E -o '[0-9]\.[0-9]+(\.[0-9]+)?' | sort -V | uniq
@@ -92,6 +94,14 @@ scan_versions() {
 has_cmd() {
     #command -v "$1" >/dev/null
     hash "$1" 2>/dev/null
+}
+
+has_wget() {
+    [ -z "$SKIP_WGET" ] && has_cmd wget
+}
+
+has_curl() {
+    has_cmd curl
 }
 
 tmp='' ;# will be set
@@ -112,15 +122,23 @@ die() {
     exit 3
 }
 
+wget_base() {
+    echo wget --connect-timeout "$connect_timeout" "$FORCE_IPV4"
+}
+
+curl_base() {
+    echo curl --connect-timeout "$connect_timeout" "$FORCE_IPV4"
+}
+
 find_latest() {
     debug find_latest: built-in version: "$release"
     debug find_latest: from "$release_list"
     local last=
     local fetch=
-    if has_cmd wget; then
-        fetch="wget -qO-"
-    elif has_cmd curl; then
-        fetch="curl --silent"
+    if has_wget; then
+        fetch="$(wget_base) -qO-"
+    elif has_curl; then
+        fetch="$(curl_base) --silent"
     else
         die "find_latest: missing both 'wget' and 'curl'"
     fi
@@ -128,6 +146,8 @@ find_latest() {
     if echo "$last" | grep -q -E '[0-9]\.[0-9]+(\.[0-9]+)?'; then
         msg find_latest: found last release: "$last"
         release=$last
+    else
+        msg find_latest: FAILED
     fi
 }
 
@@ -147,11 +167,13 @@ fi
 cache=$destination
 [ -n "$CACHE" ] && cache=$CACHE
 [ -n "$PROFILED" ] && profiled=$PROFILED
+[ -n "$CONNECT_TIMEOUT" ] && connect_timeout=$CONNECT_TIMEOUT
 
 show_vars() {
     echo user: "$(id)"
 
     cat <<EOF
+
 RELEASE_LIST=$release_list
 SOURCE=$source
 DESTINATION=$destination
@@ -163,6 +185,9 @@ PROFILED=$profiled
 CACHE=$cache
 GOPATH=$GOPATH
 DEBUG=$DEBUG
+FORCE_IPV4=$FORCE_IPV4           ;# set FORCE_IPV4=-4 to force IPv4
+CONNECT_TIMEOUT=$connect_timeout
+SKIP_WGET=$SKIP_WGET             ;# set SKIP_WGET=1 to skip wget
 
 EOF
 }
@@ -202,11 +227,13 @@ download() {
         if [ -f "$abs_filepath" ]; then
             msg no need to download - file cached: "$abs_filepath"
         else
-            if has_cmd wget; then
-                wget -O "$abs_filepath" "$url" || die could not download using wget from: "$url"
+            if has_wget; then
+                msg download: "$(wget_base)" -O "$abs_filepath" "$url"
+                $(wget_base) -O "$abs_filepath" "$url" || die could not download using wget from: "$url"
                 [ -f "$abs_filepath" ] || die missing file downloaded with wget: "$abs_filepath"
-            elif has_cmd curl; then
-                curl -o "$abs_filepath" "$url" || die could not download using curl from: "$url"
+            elif has_curl; then
+                msg download: "$(curl_base)" -o "$abs_filepath" "$url"
+                $(curl_base) -o "$abs_filepath" "$url" || die could not download using curl from: "$url"
                 [ -f "$abs_filepath" ] || die missing file downloaded with curl: "$abs_filepath"
             else
                 die "download: missing both 'wget' and 'curl'"
