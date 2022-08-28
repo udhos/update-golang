@@ -320,7 +320,7 @@ default_goroot=/usr/local/go
 
 profile_path_add() {
     profile_path_remove
-    { echo "# DO NOT EDIT: installed by $path_mark"; echo ""; }  >> "$abs_profiled"
+    { echo; echo "# DO NOT EDIT: installed by $path_mark"; echo ""; }  >> "$abs_profiled"
 
     msg profile_path_add: issuing new "$abs_gobin" to "$abs_profiled"
     { echo 'if ! echo "$PATH" | grep -Eq "(^|:)'"$abs_gobin"'($|:)"';
