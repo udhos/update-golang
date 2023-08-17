@@ -301,6 +301,10 @@ relink() {
     ln -s "$abs_new_install" "$abs_goroot"
 }
 
+fix_mod() {
+    find "$abs_new_install" -type d -exec chmod o+rx {} \;
+}
+
 path_mark=update-golang.sh
 
 profile_path_remove() {
@@ -339,10 +343,9 @@ profile_path_add() {
     echo "    export PATH=\$PATH:$user_gobin";
     echo "fi"; } >> "$abs_profiled"
 
-    if [ "$abs_goroot" != $default_goroot ]; then
-        msg profile_path_add: setting up custom GOROOT="$abs_goroot" to "$abs_profiled"
-        echo "export GOROOT=$abs_goroot" >> "$abs_profiled"
-    fi
+    msg profile_path_add: setting up GOROOT="$abs_goroot" to "$abs_profiled"
+    echo "export GOROOT=$abs_goroot" >> "$abs_profiled"
+
     echo "# $path_mark: end" >> "$abs_profiled"
 
     chmod 755 "$abs_profiled"
@@ -537,6 +540,7 @@ download
 remove_old_link
 untar
 relink
+fix_mod
 remove_old_install
 profile_path_add
 
