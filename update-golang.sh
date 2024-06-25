@@ -33,7 +33,7 @@ source=https://storage.googleapis.com/golang
 #source=https://dl.google.com/go
 #source=https://go.dev/dl
 destination=/usr/local
-release=1.21.4 ;# just the default. the script detects the latest available release.
+release=1.22.4 ;# just the default. the script detects the latest available release.
 arch_probe="uname -m"
 connect_timeout=5
 
