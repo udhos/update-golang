@@ -303,23 +303,33 @@ relink() {
 
 path_mark=update-golang.sh
 
+trim_last_blank_lines() {
+    local file="$1"
+    while [ -s "$file" -a -z "$(tail -n 1 "$file" | tr -d '\n\r ')" ]; do
+        sed -i '$d' "$file" || die "trim_last_blank_lines: could not trim file: $file"
+    done
+}
+
 profile_path_remove() {
-    if [ -f "$abs_profiled" ]; then
-        msg profile_path_remove: removing old settings from: "$abs_profiled"
-        tmp=$(mktemp -t profile-tmpXXXXXXXX) # save for later removal
-        if [ ! -f "$tmp" ]; then
-            msg profile_path_remove: could not create temporary file: "$tmp"
-            return
-        fi
-        sed "/# DO NOT EDIT: installed by $path_mark/,/# $path_mark: end/d" "$abs_profiled" > "$tmp"
-        cp "$tmp" "$abs_profiled"
+    [ -f "$abs_profiled" ] || return
+
+    msg profile_path_remove: removing old settings from: "$abs_profiled"
+    tmp=$(mktemp -t profile-tmpXXXXXXXX) # save for later removal
+    if [ ! -f "$tmp" ]; then
+        msg profile_path_remove: could not create temporary file: "$tmp"
+        return
     fi
+    sed "/# DO NOT EDIT: installed by $path_mark/,/# $path_mark: end/d" "$abs_profiled" > "$tmp"
+    cp "$tmp" "$abs_profiled"
+
+    trim_last_blank_lines "$abs_profiled"
 }
 
 default_goroot=/usr/local/go
 
 profile_path_add() {
     profile_path_remove
+
     { echo; echo "# DO NOT EDIT: installed by $path_mark"; echo ""; }  >> "$abs_profiled"
 
     msg profile_path_add: issuing new "$abs_gobin" to "$abs_profiled"
