@@ -245,7 +245,7 @@ download() {
                 validate_tarball "$abs_filepath"
             elif has_curl; then
                 msg download: "$(curl_base)" -o "$abs_filepath" "$url"
-                $(curl_base) -o "$abs_filepath" "$url" || {
+                $(curl_base) -L -o "$abs_filepath" "$url" || {
                     rm -f "$abs_filepath"
                     die could not download using curl from: "$url"
                 }
